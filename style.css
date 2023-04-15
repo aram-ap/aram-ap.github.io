@@ -27,6 +27,7 @@ html, body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+
 }
 
 /* Header Styles */
@@ -38,7 +39,7 @@ html, body {
 
 .logo {
     height: auto; /* Set the desired height */
-    width: auto; /* Set the desired width */
+    width: 33%; /* Set the desired width */
     background-color: var(--black);
 }
 
@@ -56,6 +57,13 @@ html, body {
     background-color: var(--gray);
     padding: 20px;
     flex-grow: 1; /* Allow body to grow to fill remaining space */
+}
+
+.body img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    opacity: 60%;
 }
 
 /* Footer Styles */
