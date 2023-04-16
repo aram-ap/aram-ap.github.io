@@ -12,6 +12,7 @@
 
 /* Reset some default styles */
 * {
+    background-color: var(--black);
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -27,7 +28,6 @@ html, body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-
 }
 
 /* Header Styles */
@@ -53,15 +53,17 @@ html, body {
 }
 
 /* Body Styles */
-.body {
+.section {
     background-image: url("https://aram-ap.github.io/images/nyc.jpg");
     background-size: cover;
+
+    alignment:center;
 
     padding: 20px;
     flex-grow: 1; /* Allow body to grow to fill remaining space */
 }
 
-.body img {
+.section img {
     width: auto;
     height: auto;
     object-fit: cover;
@@ -76,6 +78,21 @@ html, body {
     color: var(--white);
     padding: 20px;
     text-align: center;
+}
+
+.article {
+
+    position: absolute;
+    alignment: center;
+    background-color: #0D0D0D;
+
+    width:40%;
+    height:60%;
+}
+
+h1, h3 {
+    font-family: Verdana;
+    background-color:rgba(0,0,0,0);
 }
 
 
