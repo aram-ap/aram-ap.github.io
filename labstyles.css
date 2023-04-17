@@ -1,3 +1,9 @@
 * {
     background-color:lightgray;
+    font-family: Verdana, sans-serif;
+}
+
+img {
+    width:33%;
+    height:auto;
 }
