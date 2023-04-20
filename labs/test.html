@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Variable Scope</title>
+</head>
+<body>
+<script>
+    var a = 10;
+    var b = 20;
+    function showVars() {
+        var a = 30;
+        b = 40;
+        return a;
+    }
+    var message = showVars();
+    alert(message);
+</script>
+</body>
+</html>
