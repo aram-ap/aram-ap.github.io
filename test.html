@@ -5,15 +5,16 @@
 
 </head>
 <script>
-    var year = mydate.getFullYear(); // four-digit year e.g. 2012
-    var month = mydate.getMonth(); // month number 0 - 11; 0 is Jan, etc.
-    var date = mydate.getDate(); // day of the month 1 - 31
-    var day = mydate.getDay(); // day of the week 0 - 6; Sunday = 0, etc.
-    var hours = mydate.getHours(); // hours part of the time, 0 - 23
-    var minutes = mydate.getMinutes(); // minutes part of time, 0 - 59
-    var seconds = mydate.getSeconds(); // seconds part of time, 0 - 59
+    function changeString() {
+        var str = prompt("What will you like to change the string to?");
+        document.getElementById("conf").innerHTML = str;
+    }
 </script>
 <body>
+    <div id="conf">
+        Hello, this is a string!
+    </div>
+    <input type="button" value="Change" onclick="changeString()" />
 
 </body>
 </html>

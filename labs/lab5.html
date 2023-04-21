@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lab 5-Spam Detector</title>
+  <link rel="stylesheet" href="../labstyles.css">
+</head>
+<body>
+<script>
+
+    var str = changeString();
+
+
+    function detectSpam(input) {
+        var detected;
+        var catchWord = "fake";
+        input = input.toLowerCase();
+        detected = input.indexOf(catchWord);
+
+        if(detected >= 0) {
+            return "Spam word \'" + catchWord + "\' found at index: " + input.indexOf("fake");
+        } else {
+            return "No spam detected.";
+        }
+    }
+
+    function returnIndex(input) {
+        var index;
+        index = str.toLowerCase().indexOf(input);
+
+        if(index >= 0) {
+            return "\'" + input + "\' found at index " + index;
+        } else {
+            return "\'" + input + "\' not found";
+        }
+    }
+
+    function replaceString(word, newWord) {
+        if(word && newWord) {
+            changeString(str.toLowerCase().replace(word.toLowerCase(), newWord));
+        }
+    }
+
+    function appendString(str2) {
+        var newStr;
+        if(str2) {
+            newStr = str.concat(str2);
+            changeString(newStr);
+        } else {
+            alert("Invalid Input!");
+        }
+    }
+
+    function changeString(inp) {
+
+        if(!inp) {
+            let newStr = prompt("Enter new string: ");
+
+            if(newStr) {
+                str = newStr;
+            }
+
+        } else {
+            str = inp;
+        }
+
+        document.getElementById("currentStr").innerHTML = "<b>Current String:</b> " + str;
+    }
+
+
+
+</script>
+  <h1>Lab 5-Spam Detector + String Functions</h1>
+  <p id="currentStr"><b>Current String:</b> <script>document.write(str)</script></p>
+  <div class="buttons">
+    <table>
+      <tr>
+        <td><input type="button" value="Spam Finder" onclick="alert(detectSpam(str))"></td>
+        <td><input type="button" value="Get Index Of" onclick="alert(returnIndex(prompt('Enter String to Search For: ')))"></td>
+        <td><input type="button" value="Replace String" onclick="replaceString(prompt('Word to replace:'), prompt('Replace with:'))"></td>
+        <td><input type="button" value="Append(concat) String" onclick="appendString(prompt('Enter Line to Add:'))"></td>
+      </tr>
+      <tr>
+        <td><input type="button" value="New String" onclick="changeString()"></td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
