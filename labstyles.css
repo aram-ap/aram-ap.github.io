@@ -8,3 +8,11 @@ img {
     width:33%;
     height:auto;
 }
+
+#banner {
+    width: 400px;
+    height: auto;
+    padding: 2em;
+    background-color: #fdfdff;
+    box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+}

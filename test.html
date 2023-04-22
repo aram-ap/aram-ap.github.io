@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>datetime</title>
-
+    <title>Strings and Arrays</title>
+    <script>
+        function wrangleArray() {
+            var sentence = "This quiz is easy";
+            var words = sentence.split(" ");
+            var message = words.splice(3,2,"hard");
+            document.getElementById("div").innerHTML = "<p>" + words.join(" ") + "</p>";
+        }
+    </script>
 </head>
-<script>
-    function changeString() {
-        var str = prompt("What will you like to change the string to?");
-        document.getElementById("conf").innerHTML = str;
-    }
-</script>
 <body>
-    <div id="conf">
-        Hello, this is a string!
-    </div>
-    <input type="button" value="Change" onclick="changeString()" />
-
+<div id="div"></div>
+<script>wrangleArray();</script>
 </body>
 </html>
