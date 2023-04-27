@@ -6,10 +6,14 @@
   <link rel="stylesheet" href="../labstyles.css"/>
 
   <script>
+
+    //Our card values
     let suits = ["diamonds","hearts","spades","clubs"];
     let face = ["ace",1,2,3,4,5,6,7,8,9,10,"jack","queen","king"];
 
+    //Constructor
     function Card(suit,face) {
+
         this.suit = suit;
         this.face = face;
 
@@ -26,10 +30,13 @@
         }
     }
 
+    //Initializes our Card object
     var newCard = new Card("", "");
 
+    //Event listener waits for window to fully load before procedurally creating buttons
     window.addEventListener("load",(event) => {
 
+        //Adds Suit buttons
         for(var i=0; i < suits.length; i+=1) {
             let buttn = "<tc><button value='button' onclick='newCard.setSuit(\""
                 + suits[i]
@@ -37,9 +44,9 @@
                 + suits[i]
                 + "</tc>";
             document.getElementById('suitTable').insertAdjacentHTML('beforeend',buttn);
-            // document.writeln(buttn);
         }
 
+        //Adds Face buttons
         for(var i=0; i < face.length; i++) {
             let buttn = "<tc><button value='button' onclick='newCard.setFace(\""
                 + face[i]
