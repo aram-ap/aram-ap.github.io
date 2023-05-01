@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lab 9-Cancelling Default Behavior</title>
+  <link rel="stylesheet" href="../labstyles.css"/>
+  <script>
+      function checkform() {
+          document.getElementById("form1").onsubmit = function() {
+              var allowSubmit = true;
+              var errors = "The field(s) require attention:";
+
+              if(document.getElementById("user").value == "") {
+                  errors += "\n  -Name";
+                  allowSubmit = false;
+
+              }
+              if(document.getElementById("phone").value == "") {
+                  errors += "\n  -Phone";
+                  allowSubmit = false;
+              }
+
+              if(allowSubmit) alert("Data OK - submitting form");
+              else alert(errors);
+
+              return allowSubmit;
+          }
+      }
+      window.onload = checkform;
+  </script>
+</head>
+<body>
+<form id="form1">
+  Name: <input type="text" value="" name="username" id="user" /> [Required field]<br/>
+  Phone: <input type="text" value="" name="telephone" id="phone" /> [Required field]<br/>
+  <input type="submit" />
+</form>
+</body>
+</html>
