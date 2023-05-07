@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lab 10-Cookie Encoding</title>
+  <link rel="stylesheet" href="../labstyles.css"/>
+
+  <script>
+      function createCookie(name, value, days, path, domain, secure) {
+          if (days) {
+              var date = new Date();
+              date.setTime( date.getTime() + (days*24*60*60*1000));
+              var expires = date.toGMTString();
+          }
+          else var expires = "";
+          cookieString = name + "=" + writeCookieValue(value);
+          if (expires) cookieString +=   "; expires=" + expires;
+          if (path) cookieString += "; path=" + escape (path);
+          if (domain) cookieString += "; domain=" + escape (domain);
+          if (secure) cookieString += "; secure";
+          document.cookie = cookieString;
+      }
+
+      function isSpecialCharacter(ch) {
+          switch(ch) {
+              case ' ': return true;
+              case '*': return true;
+              case '@': return true;
+              case '-': return true;
+              case '_': return true;
+              case '+': return true;
+              case '.': return true;
+              case '/': return true;
+              default: return false;
+          }
+      }
+
+      function writeCookieValue(str) {
+          var returnString = "";
+          for(var i = 0; i < str.length; i++) {
+              if(isSpecialCharacter(str.charAt(i))) {
+                  returnString += '#';
+              } else {
+                  returnString += str.charAt(i);
+              }
+          }
+          return returnString;
+      }
+
+    window.onload = function() {
+        var val = writeCookieValue(prompt("Cookie Value: "));
+        document.getElementById("value").innerHTML = val;
+        createCookie("myCookieData", val);
+    }
+  </script>
+
+</head>
+<body>
+  <h1>Lab 10-Cookie Encoding</h1>
+  <p>Encoded Value: </p>
+  <p id="value"></p>
+  <a href="lab10_2.html">Go to Cookie Display Page</a>
+</body>
+</html>

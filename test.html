@@ -1,18 +1,44 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
-    <title>Strings and Arrays</title>
+    <title>HTML5 canvas</title>
     <script>
-        function wrangleArray() {
-            var sentence = "This quiz is easy";
-            var words = sentence.split(" ");
-            var message = words.splice(3,2,"hard");
-            document.getElementById("div").innerHTML = "<p>" + words.join(" ") + "</p>";
+        var context;
+        var x=50;
+        var y=50;
+        var counter = 0;
+        var infoDisp;
+        function paint()   {
+            context.beginPath();
+            context.fillStyle="#ff0000";
+            context.arc(x, y, 15, 0, Math.PI*2, false);
+            context.closePath();
+            context.fill();
+        }
+
+        function animate() {
+            context.clearRect(0,0, 400,300);
+            counter+= 0.25;
+            x += 20 * Math.sin(counter);
+            y += 20 * Math.cos(counter);
+
+            infoDisp.innerText = counter;
+
+            paint();
+        }
+
+        window.onload = function() {
+            infoDisp = document.getElementById("info");
+            var canvas1 = document.getElementById("canvas1");
+            context= canvas1.getContext('2d');
+            setInterval(animate, 100);
         }
     </script>
 </head>
 <body>
-<div id="div"></div>
-<script>wrangleArray();</script>
+<canvas id="canvas1" width="400" height="300">
+    <p>Your browser doesn't support the canvas element.</p>
+</canvas>
+<p id="info"></p>
 </body>
 </html>

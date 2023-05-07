@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lab 10-Cookie Retrieval</title>
+  <link rel="stylesheet" href="../labstyles.css"/>
+  <link rel="script" href="cookies.js"/>
+
+  <script>
+    function getCookie(name) {
+        var nameEquals = name + "=";
+        var crumbs = document.cookie.split('#');
+        var val = "";
+        for (var i = 0; i < crumbs.length; i++) {
+            val += crumbs[i] + " ";
+        }
+        return val;
+    }
+
+    window.onload = function() {
+        document.getElementById("output").innerHTML = "Your cookie value: " + getCookie("myCookieData");
+    }
+  </script>
+
+</head>
+<body>
+  <h1>Lab 10 Cookie Retrieval</h1>
+  <div id="output"></div>
+</body>
+</html>
