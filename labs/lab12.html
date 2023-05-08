@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lab 12-insertAfter</title>
+  <link rel="stylesheet" href="../labstyles.css"/>
+
+  <script>
+    function insertAfter(newNode, targetNode) {
+      var elem = targetNode.parentElement;
+      var next = targetNode.nextSibling;
+
+      elem.insertBefore(newNode,next);
+
+    }
+
+    window.onload = function() {
+        var divElem = document.getElementById("elementOrder");
+
+        //Center node
+        var docP1 = document.createElement("p");
+        var docP1Text = document.createTextNode("Hello, I am the center node behind all this.");
+        docP1.appendChild(docP1Text);
+        divElem.appendChild(docP1);
+
+        //Adds element before center node
+        var beforeElement = document.createElement("h4");
+        var beforeElementText = document.createTextNode("This should be before.");
+        beforeElement.appendChild(beforeElementText);
+        divElem.insertBefore(beforeElement,docP1);
+
+        //uses insertAfter to add element after center node
+        var afterElement = document.createElement("h4");
+        var afterElementText = document.createTextNode("This should be after.");
+        afterElement.appendChild(afterElementText);
+        insertAfter(afterElement,docP1);
+    }
+
+
+  </script>
+
+</head>
+<body>
+<h1>Lab 12 - 'insertAfter' Function</h1>
+<div id="elementOrder"></div>
+</body>
+</html>
