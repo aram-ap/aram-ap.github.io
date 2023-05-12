@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lab 13</title>
+<style>
+  span {
+      font-size: 16pt;
+      font-family: arial, helvetica, sans-serif;
+      padding: 20px;
+  }
+  </style>
+
+  <script>
+   function toggle() {
+      var myElement = document.getElementById("id1");
+
+    if(myElement.style.backgroundColor == 'red') {
+        myElement.style.backgroundColor = 'yellow';
+        myElement.style.color = 'black';
+    } else {
+          myElement.style.backgroundColor = 'red';
+          myElement.style.color = 'white';
+      }
+
+    if(myElement.style.fontFamily == "Courier") {
+      myElement.style.fontFamily = "Baskerville";
+    } else {
+      myElement.style.fontFamily = "Courier";
+    }
+
+
+    if(myElement.borderStyle == "double") {
+        myElement.borderStyle = "dotted";
+    } else {
+        myElement.borderStyle = "double";
+    }
+
+    if(myElement.style.textDecoration == "underline overline") {
+        myElement.style.textDecoration = "line-through";
+    } else {
+        myElement.style.textDecoration = "underline overline";
+    }
+
+  }
+  window.onload = function() {
+      document.getElementById("btn1").onclick = toggle;
+      var elem = document.getElementById("id1");
+
+      //Changing font to "Courier" (if not changed, try changing to times new roman)
+      elem.style.fontFamily = "Courier";
+      if(elem.style.fontFamily !== "Courier") elem.style.fontFamily = "Times New Roman";
+
+      //Adding decoration attribute
+      elem.style.textDecoration = "underline overline";
+
+      //Changing style of borders
+      elem.style.borderWidth = "thick thin";
+      elem.style.borderStyle = "double";
+      elem.style.borderRadius = "20px";
+
+      //Padding
+      elem.style.padding = "20px";
+
+      //Changed margin
+      elem.style.margin = "50px";
+
+  }
+  </script>
+
+</head>
+<body>
+  <span id="id1">Welcome back to my site.</span>
+  <input type="button" id="btn1" value="Toggle" />
+</body>
+</html>
