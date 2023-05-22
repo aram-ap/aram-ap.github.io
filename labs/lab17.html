@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lab 17-Present Message during Ajax Request(Keywords Grabber)</title>
+  <link rel="stylesheet" href="../labstyles.css"/>
+  <script src="myAjaxLib.js"></script>
+  <script>
+      function display(content) {
+          document.getElementById("displaydiv").innerHTML = content;
+      }
+
+      function state(content) {
+          document.getElementById("statusdiv").innerHTML += content + "<br>";
+      }
+
+
+      window.onload = function(){
+          document.getElementById("btn1").onclick = function(){
+              document.getElementById("statusdiv").innerHTML = "";
+              var url = document.getElementById("txt1").value;
+              doAjax("metatags.php", "url=" + url, "display", "post", 0);
+          }
+      }
+  </script>
+</head>
+<body>
+http://<input type="text" id="txt1" value="" />
+<input type="button" id="btn1" value="Get Keywords" />
+<h3>Keywords Received:</h3>
+<div id="displaydiv"></div>
+<h3>Status (hr, min, sec, ms)</h3>
+<div id="statusdiv"></div>
+</body>
+</html>
