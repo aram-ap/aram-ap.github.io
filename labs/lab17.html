@@ -19,7 +19,7 @@
           document.getElementById("btn1").onclick = function(){
               document.getElementById("statusdiv").innerHTML = "";
               var url = document.getElementById("txt1").value;
-              doAjax("metatags.php", "url=" + url, "display", "post", 0);
+              doAjax("http://aha.x10.mx/labs/metatags.php", "url=" + url, "display", "post", 0);
           }
       }
   </script>
