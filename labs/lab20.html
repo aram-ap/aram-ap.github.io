@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="jquery-3.7.0.js"></script>
+  <title>Lab 20</title>
+  <script>
+      function createButton(parClass, id, val) {
+          let func = "";
+          let newButton = $("<tc><button value='button'/>"
+              + val
+              + "</tc>" );
+          newButton.attr("id",id);
+          newButton.attr("class", parClass);
+
+          return newButton;
+      }
+
+    $( document ).ready(function(){
+        //Our card values
+        let suits = ["diamonds","hearts","spades","clubs"];
+        let face = ["ace",1,2,3,4,5,6,7,8,9,10,"jack","queen","king"];
+
+        var suitTable = $("#suitTable");
+        var faceTable = $("#faceTable");
+
+        var suitHeader = $("#suitHeader");
+        var faceHeader = $("#faceHeader");
+
+        for(var i = 0; i < suits.length; i++) {
+            var newButton = createButton("suits", suits[i], suits[i]);
+            newButton.appendTo(suitTable);
+            newButton.on("click", {
+                class: "suits",
+                id: suits[i]
+            }, function( event ) {
+                suitHeader.text("Suit: " + event.data.id);
+                console.log(event.data.id);
+            });
+        }
+
+        for(var i = 0; i < face.length; i++) {
+            var newButton = createButton("faces", face[i], face[i]);
+            newButton.appendTo(faceTable);
+            newButton.on("click", {
+                class: "faces",
+                id: face[i]
+            }, function( event ) {
+                faceHeader.text("Face: " + event.data.id);
+                console.log(event.data.id);
+            });
+        }
+
+    });
+  </script>
+</head>
+<body>
+  <h1> A remake of lab 7 (cards) - USING JQUERY</h1>
+  <h3 id="suitHeader">Suit: </h3>
+  <table><tr id="suitTable"></tr></table>
+  <h3 id="faceHeader">Face: </h3>
+  <table><tr id="faceTable"></tr></table>
+</body>
+</html>
