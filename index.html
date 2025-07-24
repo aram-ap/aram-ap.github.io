@@ -1,40 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-
-  <title>Aram_Aprahamian</title>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="style.css">
-
-  <meta name="description" content="Aram Aprahamian¡¡¡'s Web Portfolio">
-  <meta name="author" content="Aram Aprahamian">
-  <meta http-equiv="refresh" content="30">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <base href="https://aram-ap.github.io" target="_blank">
-
-</head>
-
-<body>
-<div class="container">
-  <div class="header">
-    <div class="logo">
-      <a href="https://aram-ap.github.io" target="_self">
-        <img src="https://aram-ap.github.io/images/logo.png" alt="Aram Aprahamian">
-      </a>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="article">
-
-    </div>
-  </div>
-
-  <div class="footer">
-  </div>
-
-</div>
-</body>
-
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aram's Portfolio</title>
+    
+    <!-- Preload critical fonts for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Preload profile image to prevent layout shifts -->
+    <link rel="preload" href="/src/assets/me.jpg" as="image">
+    
+    <!-- Critical CSS to prevent FOUC -->
+    <style>
+      :root {
+        --main-bg: #0A0A0F;
+        --main-bg-gradient: 
+          radial-gradient(circle at 20% 80%, rgba(108, 92, 231, 0.1) 0%, transparent 50%),
+          radial-gradient(circle at 80% 20%, rgba(9, 132, 227, 0.1) 0%, transparent 50%),
+          radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        background: #0A0A0F;
+        background-image: var(--main-bg-gradient);
+        color: #E5E7EB;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        overflow-x: hidden;
+        position: relative;
+        will-change: transform; /* Optimize for animations */
+      }
+      
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+          radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+          radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+          radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+        background-size: 200px 200px, 300px 300px, 150px 150px;
+        pointer-events: none;
+        z-index: -1;
+        opacity: 0.8;
+      }
+      
+      #root {
+        min-height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html> 
