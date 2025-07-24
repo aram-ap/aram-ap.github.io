@@ -1,0 +1,77 @@
+# Dependencies
+/node_modules
+
+# Build output
+/dist
+/.vite
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor directories and files
+.idea
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.Apple*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Testing
+/coverage
+*.lcov
+
+# Misc
+*.log
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+# Ignore Vite cache
+.vite
+
+# Parcel (if used)
+/.parcel-cache
+
+# Yarn
+.yarn-integrity
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# ESLint
+.eslintcache
+
+# Prettier (if used)
+.prettier-cache
+
+# Debug files
+debug/
+
+# Local dev files
+*.local
+
