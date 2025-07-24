@@ -13,7 +13,7 @@ import NASARockSat2025 from "./pages/NASARockSat2025";
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Router>
+      <Router basename={import.meta.env.BASE_URL}>
         <Navigation />
         <Routes>
           <Route path="/" element={<Home />} />

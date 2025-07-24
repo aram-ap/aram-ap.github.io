@@ -5,6 +5,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "postbuild": "node scripts/copy404.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "preview": "vite preview"
   },
   "repository": {
@@ -28,5 +31,8 @@
     "react-router-dom": "^7.7.0",
     "styled-components": "^6.1.19",
     "vite": "^7.0.5"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }
