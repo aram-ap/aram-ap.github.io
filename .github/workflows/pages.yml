@@ -24,6 +24,9 @@ jobs:
           echo "VITE_EMAILJS_PUBLIC_KEY=${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}" >> $GITHUB_ENV
           echo "VITE_CONTACT_EMAIL=${{ secrets.VITE_CONTACT_EMAIL }}" >> $GITHUB_ENV
           echo "VITE_SITE_NAME=${{ secrets.VITE_SITE_NAME }}" >> $GITHUB_ENV
+          echo "Debug: Service ID = ${{ secrets.VITE_EMAILJS_SERVICE_ID }}"
+          echo "Debug: Template ID = ${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}"
+          echo "Debug: Public Key = ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}"
       - run: npm run build
       - run: node scripts/copy404.js
       - uses: actions/upload-pages-artifact@v3

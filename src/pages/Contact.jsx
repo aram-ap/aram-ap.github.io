@@ -263,7 +263,12 @@ const Contact = () => {
 
       // Check if EmailJS is configured
       if (!serviceId || !templateId || !publicKey) {
-        throw new Error('EmailJS not configured. Please set up your EmailJS credentials.');
+        console.error('EmailJS Configuration:', {
+          serviceId: serviceId ? 'Set' : 'Missing',
+          templateId: templateId ? 'Set' : 'Missing', 
+          publicKey: publicKey ? 'Set' : 'Missing'
+        });
+        throw new Error('EmailJS not configured. Please set up your EmailJS credentials in GitHub Secrets.');
       }
 
       const result = await emailjs.send(
