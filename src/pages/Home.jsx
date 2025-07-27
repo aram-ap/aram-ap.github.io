@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FiGithub, FiLinkedin, FiMail, FiDownload, FiSend, FiZap } from "react-icons/fi";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import profileImage from "../assets/me.jpg";
 import CircuitReveal from "../components/CircuitReveal";
 
@@ -279,6 +279,7 @@ const Home = () => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const [showCircuitReveal, setShowCircuitReveal] = useState(null); // null: checking, true: show animation, false: skip
     const location = useLocation();
+    const navigate = useNavigate();
 
     // Decide whether to show the CircuitReveal animation.
     // We show it ONLY the very first time Home mounts in a given SPA runtime.
@@ -345,6 +346,10 @@ const Home = () => {
         document.body.removeChild(link);
     };
 
+    const handleGetInTouch = () => {
+        navigate('/contact');
+    };
+
     // Don't render anything until we've determined whether to show the animation
     if (showCircuitReveal === null) {
         return null;
@@ -408,6 +413,7 @@ const Home = () => {
 
                         <ButtonGroup variants={itemVariants}>
                             <PrimaryButton
+                                onClick={handleGetInTouch}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
