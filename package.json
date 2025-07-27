@@ -1,6 +1,7 @@
 {
   "name": "aram-ap.github.io",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
@@ -21,6 +22,7 @@
   "homepage": "https://github.com/aram-ap/aram-ap.github.io#readme",
   "description": "",
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@vitejs/plugin-react": "^4.7.0",
     "framer-motion": "^12.23.7",
     "react": "^19.1.0",
