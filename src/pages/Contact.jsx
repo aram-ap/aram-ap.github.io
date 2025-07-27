@@ -256,16 +256,15 @@ const Contact = () => {
     setShowError(false);
 
     try {
-      // Use build-time constants (works with GitHub Pages)
-      const serviceId = __EMAILJS_SERVICE_ID__;
-      const templateId = __EMAILJS_TEMPLATE_ID__;
-      const publicKey = __EMAILJS_PUBLIC_KEY__;
+      const serviceId = 'service_vzugfkm';
+      const templateId = 'template_byefxln';
+      const publicKey = 'xBC6c8TpeDA4OGS6F';
 
       // Check if EmailJS is configured
       if (!serviceId || !templateId || !publicKey) {
         console.error('EmailJS Configuration:', {
           serviceId: serviceId ? 'Set' : 'Missing',
-          templateId: templateId ? 'Set' : 'Missing', 
+          templateId: templateId ? 'Set' : 'Missing',
           publicKey: publicKey ? 'Set' : 'Missing'
         });
         throw new Error('EmailJS not configured. Please set up your EmailJS credentials in GitHub Secrets.');
@@ -295,7 +294,7 @@ const Contact = () => {
     } catch (error) {
       console.error('Email send error:', error);
       setShowError(true);
-      setErrorMessage(`Failed to send message. Please try again or contact me directly at ${__CONTACT_EMAIL__}`);
+      setErrorMessage(`Failed to send message. Please try again or contact me directly at aram@apra.dev`);
       setTimeout(() => setShowError(false), 5000);
     } finally {
       setIsSubmitting(false);
