@@ -256,10 +256,19 @@ const Contact = () => {
     setShowError(false);
 
     try {
-      // Use environment variables for EmailJS credentials
+      // Use build-time constants (works with GitHub Pages)
+      const serviceId = __EMAILJS_SERVICE_ID__;
+      const templateId = __EMAILJS_TEMPLATE_ID__;
+      const publicKey = __EMAILJS_PUBLIC_KEY__;
+
+      // Check if EmailJS is configured
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error('EmailJS not configured. Please set up your EmailJS credentials.');
+      }
+
       const result = await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        serviceId,
+        templateId,
         {
           from_name: formData.name,
           from_email: formData.email,
@@ -268,7 +277,7 @@ const Contact = () => {
           to_name: 'Aram Aprahamian',
           reply_to: formData.email,
         },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+        publicKey
       );
 
       if (result.status === 200) {
@@ -281,7 +290,7 @@ const Contact = () => {
     } catch (error) {
       console.error('Email send error:', error);
       setShowError(true);
-      setErrorMessage(`Failed to send message. Please try again or contact me directly at ${import.meta.env.VITE_CONTACT_EMAIL || 'aram@apra.dev'}`);
+      setErrorMessage(`Failed to send message. Please try again or contact me directly at ${__CONTACT_EMAIL__}`);
       setTimeout(() => setShowError(false), 5000);
     } finally {
       setIsSubmitting(false);
