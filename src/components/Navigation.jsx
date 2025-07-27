@@ -54,7 +54,7 @@ const NavLinks = styled.div`
 
 const NavLink = styled(Link)`
   position: relative;
-  color: ${(props) => props.active ? props.theme.colors.accent : props.theme.colors.textSecondary};
+  color: ${(props) => props.$active ? props.theme.colors.accent : props.theme.colors.textSecondary};
   font-weight: ${(props) => props.theme.typography.fontWeights.medium};
   padding: ${(props) => props.theme.spacing.xs} 0;
   
@@ -63,7 +63,7 @@ const NavLink = styled(Link)`
     position: absolute;
     bottom: -4px;
     left: 0;
-    width: ${(props) => props.active ? '100%' : '0%'};
+    width: ${(props) => props.$active ? '100%' : '0%'};
     height: 2px;
     background: ${(props) => props.theme.colors.accent};
     transition: width ${(props) => props.theme.animations.normal};
@@ -149,7 +149,7 @@ const Navigation = () => {
               <NavLink
                 key={item.path}
                 to={item.path}
-                active={location.pathname === item.path}
+                $active={location.pathname === item.path}
               >
                 {item.label}
               </NavLink>

@@ -46,9 +46,9 @@ const FilterSection = styled(motion.div)`
 
 const FilterButton = styled(motion.button)`
   padding: ${(props) => props.theme.spacing.sm} ${(props) => props.theme.spacing.md};
-  border: 2px solid ${(props) => props.active ? props.theme.colors.accent : props.theme.colors.border};
-  background: ${(props) => props.active ? props.theme.colors.accent : 'transparent'};
-  color: ${(props) => props.active ? props.theme.colors.text : props.theme.colors.textSecondary};
+  border: 2px solid ${(props) => props.$active ? props.theme.colors.accent : props.theme.colors.border};
+  background: ${(props) => props.$active ? props.theme.colors.accent : 'transparent'};
+  color: ${(props) => props.$active ? props.theme.colors.text : props.theme.colors.textSecondary};
   border-radius: 50px;
   font-weight: ${(props) => props.theme.typography.fontWeights.medium};
   display: flex;
@@ -297,7 +297,7 @@ const Projects = () => {
             {filters.map((filter) => (
               <FilterButton
                 key={filter}
-                active={activeFilter === filter}
+                $active={activeFilter === filter}
                 onClick={() => setActiveFilter(filter)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
