@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FiMail, FiPhone, FiMapPin, FiGithub, FiLinkedin, FiTwitter, FiSend } from "react-icons/fi";
+import emailjs from '@emailjs/browser';
 
 const ContactContainer = styled.main`
   padding-top: 120px;
@@ -23,7 +24,7 @@ const Title = styled(motion.h1)`
   font-size: ${(props) => props.theme.typography.fontSizes.hero};
   color: ${(props) => props.theme.colors.text};
   margin-bottom: ${(props) => props.theme.spacing.md};
-  
+
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     font-size: ${(props) => props.theme.typography.fontSizes.xxl};
   }
@@ -40,7 +41,7 @@ const ContactContent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: ${(props) => props.theme.spacing.xxl};
-  
+
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     grid-template-columns: 1fr;
     gap: ${(props) => props.theme.spacing.xl};
@@ -59,7 +60,7 @@ const InfoCard = styled(motion.div)`
   border-radius: 16px;
   border: 1px solid ${(props) => props.theme.colors.border};
   transition: all ${(props) => props.theme.animations.normal};
-  
+
   &:hover {
     border-color: ${(props) => props.theme.colors.accent};
     transform: translateY(-4px);
@@ -106,7 +107,7 @@ const SocialLink = styled(motion.a)`
   color: ${(props) => props.theme.colors.textSecondary};
   font-size: ${(props) => props.theme.typography.fontSizes.lg};
   transition: all ${(props) => props.theme.animations.normal};
-  
+
   &:hover {
     background: ${(props) => props.theme.colors.accent};
     color: ${(props) => props.theme.colors.text};
@@ -147,13 +148,13 @@ const Input = styled.input`
   color: ${(props) => props.theme.colors.text};
   font-size: ${(props) => props.theme.typography.fontSizes.md};
   transition: all ${(props) => props.theme.animations.normal};
-  
+
   &:focus {
     outline: none;
     border-color: ${(props) => props.theme.colors.accent};
     box-shadow: 0 0 0 3px ${(props) => props.theme.colors.accentLight};
   }
-  
+
   &::placeholder {
     color: ${(props) => props.theme.colors.textMuted};
   }
@@ -171,13 +172,13 @@ const TextArea = styled.textarea`
   resize: vertical;
   min-height: 120px;
   transition: all ${(props) => props.theme.animations.normal};
-  
+
   &:focus {
     outline: none;
     border-color: ${(props) => props.theme.colors.accent};
     box-shadow: 0 0 0 3px ${(props) => props.theme.colors.accentLight};
   }
-  
+
   &::placeholder {
     color: ${(props) => props.theme.colors.textMuted};
   }
@@ -196,12 +197,12 @@ const SubmitButton = styled(motion.button)`
   gap: ${(props) => props.theme.spacing.xs};
   cursor: pointer;
   transition: all ${(props) => props.theme.animations.normal};
-  
+
   &:hover {
     background: ${(props) => props.theme.colors.accentHover};
     transform: translateY(-2px);
   }
-  
+
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -219,6 +220,16 @@ const SuccessMessage = styled(motion.div)`
   font-weight: ${(props) => props.theme.typography.fontWeights.medium};
 `;
 
+const ErrorMessage = styled(motion.div)`
+  background: ${(props) => props.theme.colors.danger};
+  color: ${(props) => props.theme.colors.text};
+  padding: ${(props) => props.theme.spacing.md};
+  border-radius: 8px;
+  margin-bottom: ${(props) => props.theme.spacing.lg};
+  text-align: center;
+  font-weight: ${(props) => props.theme.typography.fontWeights.medium};
+`;
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -228,6 +239,8 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -239,16 +252,40 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setShowSuccess(true);
-    setFormData({ name: "", email: "", subject: "", message: "" });
-    
-    // Hide success message after 5 seconds
-    setTimeout(() => setShowSuccess(false), 5000);
+    setShowSuccess(false);
+    setShowError(false);
+
+    try {
+      // Use environment variables for EmailJS credentials
+      const result = await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          to_name: 'Aram Aprahamian',
+          reply_to: formData.email,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+
+      if (result.status === 200) {
+        setShowSuccess(true);
+        setFormData({ name: "", email: "", subject: "", message: "" });
+        setTimeout(() => setShowSuccess(false), 5000);
+      } else {
+        throw new Error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Email send error:', error);
+      setShowError(true);
+      setErrorMessage(`Failed to send message. Please try again or contact me directly at ${import.meta.env.VITE_CONTACT_EMAIL || 'aram@apra.dev'}`);
+      setTimeout(() => setShowError(false), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -271,8 +308,8 @@ const Contact = () => {
 
   const socialLinks = [
     { icon: FiGithub, href: "https://github.com/aram-ap", label: "GitHub" },
-    { icon: FiLinkedin, href: "https://linkedin.com/in/your-profile", label: "LinkedIn" },
-    { icon: FiTwitter, href: "https://twitter.com/your-profile", label: "Twitter" },
+    { icon: FiLinkedin, href: "https://www.linkedin.com/in/aram-aprahamian", label: "LinkedIn" },
+    // { icon: FiTwitter, href: "https://twitter.com/your-profile", label: "Twitter" },
   ];
 
   const containerVariants = {
@@ -309,7 +346,7 @@ const Contact = () => {
           <Header>
             <Title variants={itemVariants}>Get In Touch</Title>
             <Subtitle variants={itemVariants}>
-              Let's discuss your project ideas and bring them to life together. 
+              Let's discuss your project ideas and bring them to life together.
               I'd love to hear from you!
             </Subtitle>
           </Header>
@@ -329,7 +366,7 @@ const Contact = () => {
                   <InfoText>{info.text}</InfoText>
                 </InfoCard>
               ))}
-              
+
               <InfoCard variants={itemVariants} whileHover={{ y: -4 }}>
                 <InfoTitle>Follow Me</InfoTitle>
                 <InfoText>Connect with me on social media</InfoText>
@@ -358,7 +395,7 @@ const Contact = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
             >
               <FormTitle>Send me a message</FormTitle>
-              
+
               {showSuccess && (
                 <SuccessMessage
                   initial={{ opacity: 0, y: -20 }}
@@ -367,6 +404,16 @@ const Contact = () => {
                 >
                   Thank you! Your message has been sent successfully.
                 </SuccessMessage>
+              )}
+
+              {showError && (
+                <ErrorMessage
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                >
+                  {errorMessage}
+                </ErrorMessage>
               )}
 
               <FormGroup>
@@ -437,4 +484,4 @@ const Contact = () => {
   );
 };
 
-export default Contact; 
+export default Contact;

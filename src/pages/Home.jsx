@@ -275,241 +275,252 @@ const FloatingElement = styled(motion.div)`
 `;
 
 const Home = () => {
-  const [circuitComplete, setCircuitComplete] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [showCircuitReveal, setShowCircuitReveal] = useState(null); // null: checking, true: show animation, false: skip
-  const location = useLocation();
+    const [circuitComplete, setCircuitComplete] = useState(false);
+    const [imageLoaded, setImageLoaded] = useState(false);
+    const [showCircuitReveal, setShowCircuitReveal] = useState(null); // null: checking, true: show animation, false: skip
+    const location = useLocation();
 
-  // Decide whether to show the CircuitReveal animation.
-  // We show it ONLY the very first time Home mounts in a given SPA runtime.
-  // Subsequent navigations back to Home skip it. A full page refresh resets the flag.
-  useEffect(() => {
-    if (window.__circuitRevealShown) {
-      // Already shown during this page session – skip animation.
-      setShowCircuitReveal(false);
-      setCircuitComplete(true);
-    } else {
-      // First time – show animation and set the flag.
-      window.__circuitRevealShown = true;
-      setShowCircuitReveal(true);
+    // Decide whether to show the CircuitReveal animation.
+    // We show it ONLY the very first time Home mounts in a given SPA runtime.
+    // Subsequent navigations back to Home skip it. A full page refresh resets the flag.
+    useEffect(() => {
+        if (window.__circuitRevealShown) {
+            // Already shown during this page session – skip animation.
+            setShowCircuitReveal(false);
+            setCircuitComplete(true);
+        } else {
+            // First time – show animation and set the flag.
+            window.__circuitRevealShown = true;
+            setShowCircuitReveal(true);
+        }
+    }, []);
+
+    // Preload the profile image
+    useEffect(() => {
+        const img = new Image();
+        img.src = profileImage;
+        img.onload = () => setImageLoaded(true);
+    }, []);
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.3,
+                delayChildren: showCircuitReveal ? (circuitComplete ? 0.5 : 4.0) : 0, // No delay if skipping animation
+            },
+        },
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.6,
+                ease: "easeOut",
+            },
+        },
+    };
+
+    const socialLinks = [
+        { icon: FiGithub, href: "https://github.com/aram-ap", label: "GitHub" },
+        { icon: FiLinkedin, href: "https://linkedin.com/in/aram-aprahamian", label: "LinkedIn" },
+        { icon: FiMail, href: "mailto:aram@apra.dev", label: "Email" },
+    ];
+
+    const handleCircuitComplete = () => {
+        setCircuitComplete(true);
+    };
+
+    const handleDownloadResume = () => {
+        const link = document.createElement('a');
+        link.href = '/aram-aprahamian-resume.pdf';
+        link.download = 'Aram_Aprahamian_Resume.pdf';
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    // Don't render anything until we've determined whether to show the animation
+    if (showCircuitReveal === null) {
+        return null;
     }
-  }, []);
 
-  // Preload the profile image
-  useEffect(() => {
-    const img = new Image();
-    img.src = profileImage;
-    img.onload = () => setImageLoaded(true);
-  }, []);
+    return (
+        <>
+            {showCircuitReveal && <CircuitReveal onComplete={handleCircuitComplete} />}
+            <HomeContainer>
+                <Container>
+                    <ContentSection
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        <Greeting variants={itemVariants}>
+                            Hello, I'm
+                        </Greeting>
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-        delayChildren: showCircuitReveal ? (circuitComplete ? 0.5 : 4.0) : 0, // No delay if skipping animation
-      },
-    },
-  };
+                        <Name variants={itemVariants}>
+                            Aram Aprahamian
+                        </Name>
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
+                        <Title variants={itemVariants}>
+                            Software Systems Engineer
+                        </Title>
 
-  const socialLinks = [
-    { icon: FiGithub, href: "https://github.com/aram-ap", label: "GitHub" },
-    { icon: FiLinkedin, href: "https://linkedin.com/in/your-profile", label: "LinkedIn" },
-    { icon: FiMail, href: "mailto:your-email@example.com", label: "Email" },
-  ];
+                        <NASAHighlight variants={itemVariants}>
+                            <NASAText>
+                                🚀 NASA RockSat-X | Software Lead 2024 | Electrical Lead 2025
+                            </NASAText>
+                        </NASAHighlight>
 
-  const handleCircuitComplete = () => {
-    setCircuitComplete(true);
-  };
+                        <Description variants={itemVariants}>
+                            Hey, I’m Aram—a 21-year-old full-stack engineer who loves space and making cool stuff.
+                            From coding sleek IoT apps and visualizing data, to designing PCBs and playing with robots,
+                            I’m all about blending hardware and software into something awesome. If it’s techy and fun, count me in.
+                        </Description>
 
-  // Don't render anything until we've determined whether to show the animation
-  if (showCircuitReveal === null) {
-    return null;
-  }
+                        <NASAProjectsSection variants={itemVariants}>
+                            <NASAProjectsTitle>Featured NASA Projects</NASAProjectsTitle>
+                            <NASAProjectButtons>
+                                <NASAProjectButton
+                                    to="/nasa-rocksat-2024"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    <FiSend />
+                                    RockSat-X 2024 (Software Lead)
+                                </NASAProjectButton>
+                                <NASAProjectButton
+                                    to="/nasa-rocksat-2025"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    <FiZap />
+                                    RockSat-X 2025 (Electrical Lead)
+                                </NASAProjectButton>
+                            </NASAProjectButtons>
+                        </NASAProjectsSection>
 
-  return (
-    <>
-      {showCircuitReveal && <CircuitReveal onComplete={handleCircuitComplete} />}
-      <HomeContainer>
-        <Container>
-          <ContentSection
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <Greeting variants={itemVariants}>
-              Hello, I'm
-            </Greeting>
+                        <ButtonGroup variants={itemVariants}>
+                            <PrimaryButton
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <FiMail />
+                                Get In Touch
+                            </PrimaryButton>
 
-            <Name variants={itemVariants}>
-              Aram Aprahamian
-            </Name>
+                            <SecondaryButton
+                                onClick={handleDownloadResume}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <FiDownload />
+                                Resume
+                            </SecondaryButton>
+                        </ButtonGroup>
 
-            <Title variants={itemVariants}>
-              Software Systems Engineer
-            </Title>
+                        <SocialLinks variants={itemVariants}>
+                            {socialLinks.map((social, index) => (
+                                <SocialLink
+                                    key={index}
+                                    href={social.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                >
+                                    <social.icon />
+                                </SocialLink>
+                            ))}
+                        </SocialLinks>
+                    </ContentSection>
 
-            <NASAHighlight variants={itemVariants}>
-              <NASAText>
-                🚀 NASA RockSat-X | Software Lead 2024 | Electrical Lead 2025
-              </NASAText>
-            </NASAHighlight>
+                    <ImageSection
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8, delay: showCircuitReveal ? (circuitComplete ? 1.0 : 4.5) : 0.5 }}
+                    >
+                        <ProfileImageContainer>
+                            <ProfileImage
+                                src={profileImage}
+                                alt="Aram Aprahamian"
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ duration: 0.3 }}
+                            />
 
-            <Description variants={itemVariants}>
-                Hey, I’m Aram—a 21-year-old full-stack engineer who loves space and making cool stuff.
-                From coding sleek IoT apps and visualizing data, to designing PCBs and playing with robots,
-                I’m all about blending hardware and software into something awesome. If it’s techy and fun, count me in.
-            </Description>
-
-            <NASAProjectsSection variants={itemVariants}>
-              <NASAProjectsTitle>Featured NASA Projects</NASAProjectsTitle>
-              <NASAProjectButtons>
-                <NASAProjectButton
-                  to="/nasa-rocksat-2024"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <FiSend />
-                  RockSat-X 2024 (Software Lead)
-                </NASAProjectButton>
-                <NASAProjectButton
-                  to="/nasa-rocksat-2025"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <FiZap />
-                  RockSat-X 2025 (Electrical Lead)
-                </NASAProjectButton>
-              </NASAProjectButtons>
-            </NASAProjectsSection>
-
-            <ButtonGroup variants={itemVariants}>
-              <PrimaryButton
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FiMail />
-                Get In Touch
-              </PrimaryButton>
-
-              <SecondaryButton
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FiDownload />
-                Download CV
-              </SecondaryButton>
-            </ButtonGroup>
-
-            <SocialLinks variants={itemVariants}>
-              {socialLinks.map((social, index) => (
-                <SocialLink
-                  key={index}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <social.icon />
-                </SocialLink>
-              ))}
-            </SocialLinks>
-          </ContentSection>
-
-          <ImageSection
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: showCircuitReveal ? (circuitComplete ? 1.0 : 4.5) : 0.5 }}
-          >
-            <ProfileImageContainer>
-              <ProfileImage
-                src={profileImage}
-                alt="Aram Aprahamian"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-              />
-
-              <FloatingElement
-                animate={{
-                  y: [0, -20, 0],
-                  rotate: 360,
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: showCircuitReveal ? (circuitComplete ? 0 : 4.0) : 0,
-                }}
-              />
-              <FloatingElement
-                animate={{
-                  y: [0, 15, 0],
-                  x: [0, 10, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: showCircuitReveal ? (circuitComplete ? 1 : 5.0) : 0.5,
-                }}
-              />
-              <FloatingElement
-                animate={{
-                  y: [0, -15, 0],
-                  rotate: -360,
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: showCircuitReveal ? (circuitComplete ? 2 : 6.0) : 1.0,
-                }}
-              />
-              <FloatingElement
-                animate={{
-                  x: [0, 20, 0],
-                  y: [0, -10, 0],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: showCircuitReveal ? (circuitComplete ? 0.5 : 4.5) : 0.2,
-                }}
-              />
-              <FloatingElement
-                animate={{
-                  y: [0, -25, 0],
-                  x: [0, -15, 0],
-                  rotate: 180,
-                }}
-                transition={{
-                  duration: 7,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: showCircuitReveal ? (circuitComplete ? 1.5 : 5.5) : 0.8,
-                }}
-              />
-            </ProfileImageContainer>
-          </ImageSection>
-        </Container>
-      </HomeContainer>
-    </>
-  );
+                            <FloatingElement
+                                animate={{
+                                    y: [0, -20, 0],
+                                    rotate: 360,
+                                }}
+                                transition={{
+                                    duration: 6,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                    delay: showCircuitReveal ? (circuitComplete ? 0 : 4.0) : 0,
+                                }}
+                            />
+                            <FloatingElement
+                                animate={{
+                                    y: [0, 15, 0],
+                                    x: [0, 10, 0],
+                                }}
+                                transition={{
+                                    duration: 4,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                    delay: showCircuitReveal ? (circuitComplete ? 1 : 5.0) : 0.5,
+                                }}
+                            />
+                            <FloatingElement
+                                animate={{
+                                    y: [0, -15, 0],
+                                    rotate: -360,
+                                }}
+                                transition={{
+                                    duration: 8,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                    delay: showCircuitReveal ? (circuitComplete ? 2 : 6.0) : 1.0,
+                                }}
+                            />
+                            <FloatingElement
+                                animate={{
+                                    x: [0, 20, 0],
+                                    y: [0, -10, 0],
+                                }}
+                                transition={{
+                                    duration: 5,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                    delay: showCircuitReveal ? (circuitComplete ? 0.5 : 4.5) : 0.2,
+                                }}
+                            />
+                            <FloatingElement
+                                animate={{
+                                    y: [0, -25, 0],
+                                    x: [0, -15, 0],
+                                    rotate: 180,
+                                }}
+                                transition={{
+                                    duration: 7,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                    delay: showCircuitReveal ? (circuitComplete ? 1.5 : 5.5) : 0.8,
+                                }}
+                            />
+                        </ProfileImageContainer>
+                    </ImageSection>
+                </Container>
+            </HomeContainer>
+        </>
+    );
 };
 
 export default Home;
