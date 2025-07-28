@@ -18,6 +18,10 @@ const Container = styled.div`
   max-width: 800px;
   margin: 0 auto;
   padding: 0 ${(props) => props.theme.spacing.lg};
+  
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    padding: 0 20px;
+  }
 `;
 
 const FeaturedImage = styled(motion.div).withConfig({
@@ -200,7 +204,7 @@ const Content = styled(motion.div).withConfig({
   line-height: ${(props) => props.theme.typography.lineHeights.relaxed};
   
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
-    margin: 0 ${(props) => props.theme.spacing.lg};
+    margin: 0;
     border-radius: 12px;
     padding: ${(props) => props.theme.spacing.lg};
   }

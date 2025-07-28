@@ -104,7 +104,7 @@ const Container = styled.div`
   padding: 0 ${(props) => props.theme.spacing.lg};
 
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
-    padding: 0;
+    padding: 0 20px;
   }
 `;
 
@@ -275,7 +275,7 @@ const ContentStyled = styled.div`
   }
 
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
-    margin: 0 ${(props) => props.theme.spacing.lg};
+    margin: 0;
     border-radius: 12px;
     padding: ${(props) => props.theme.spacing.lg};
   }

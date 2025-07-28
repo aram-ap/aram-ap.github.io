@@ -155,8 +155,10 @@ const ImageOverlay = styled.div`
   z-index: 3;
   
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
-    padding: 0 ${(props) => props.theme.spacing.lg};
+    position: static;
+    padding: ${(props) => props.theme.spacing.md} 0 0 0;
     text-align: left;
+    color: ${(props) => props.theme.colors.text};
   }
 `;
 
@@ -168,6 +170,13 @@ const ImageOverlayBackground = styled.div`
   max-width: 80%;
   line-height: 1;
   vertical-align: middle;
+  
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    background: transparent;
+    padding: 0;
+    max-width: 100%;
+    display: block;
+  }
 `;
 
 const ImageTitle = styled.span`
@@ -760,7 +769,7 @@ const Slideshow = ({
                   }}
                   onLoad={() => setImageLoaded(true)}
                 />
-                {showImageText && currentSlideData.imageTitle && (
+                {showImageText && currentSlideData.imageTitle && !isMobile && (
                   <ImageOverlay>
                     <ImageOverlayBackground>
                       <ImageTitle>{currentSlideData.imageTitle}</ImageTitle>
@@ -783,6 +792,16 @@ const Slideshow = ({
                 </ExpandButton>
                 )}
               </ImageContainer>
+              {showImageText && currentSlideData.imageTitle && isMobile && (
+                <ImageOverlay>
+                  <ImageOverlayBackground>
+                    <ImageTitle>{currentSlideData.imageTitle}</ImageTitle>
+                    {currentSlideData.imageCaption && (
+                      <ImageCaption>{currentSlideData.imageCaption}</ImageCaption>
+                    )}
+                  </ImageOverlayBackground>
+                </ImageOverlay>
+              )}
             </SlideContainer>
           </AnimatePresence>
           

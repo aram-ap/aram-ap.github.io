@@ -29,6 +29,7 @@ const Container = styled.div`
     grid-template-columns: 1fr;
     gap: ${(props) => props.theme.spacing.xl};
     text-align: center;
+    padding: 5px;
   }
 `;
 

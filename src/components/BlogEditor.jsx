@@ -21,6 +21,10 @@ const Container = styled.div`
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 ${(props) => props.theme.spacing.lg};
+  
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    padding: 0 5px;
+  }
 `;
 
 const Header = styled.div`
