@@ -305,15 +305,20 @@ const Home = () => {
         }
 
         // Clear the flag when the user reloads or leaves the page so that a hard refresh
-        // will play the animation again.
-        const handleBeforeUnload = () => {
+        // will play the animation again. Include both beforeunload and pagehide for mobile compatibility.
+        const handlePageExit = () => {
             sessionStorage.removeItem('circuitRevealShown');
+            delete window.__homePageVisited;
+            delete window.__circuitRevealShown;
         };
 
-        window.addEventListener('beforeunload', handleBeforeUnload);
+        // Use both events for better mobile compatibility
+        window.addEventListener('beforeunload', handlePageExit);
+        window.addEventListener('pagehide', handlePageExit);
 
         return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
+            window.removeEventListener('beforeunload', handlePageExit);
+            window.removeEventListener('pagehide', handlePageExit);
         };
     }, []);
 
