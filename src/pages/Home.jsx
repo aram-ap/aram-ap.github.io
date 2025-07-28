@@ -280,6 +280,8 @@ const Home = () => {
     const [imageLoaded, setImageLoaded] = useState(false);
     // Circuit reveal animation control: null=checking, true=show, false=skip
     const [showCircuitReveal, setShowCircuitReveal] = useState(null);
+    // Content animation control: prevent animations on subsequent visits
+    const [hasVisitedHome, setHasVisitedHome] = useState(window.__homePageVisited || false);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -287,14 +289,37 @@ const Home = () => {
     // We show it ONLY the very first time Home mounts in a given SPA runtime.
     // Subsequent navigations back to Home skip it. A full page refresh resets the flag.
     useEffect(() => {
-        if (window.__circuitRevealShown) {
+        const flag = sessionStorage.getItem('circuitRevealShown');
+        if (flag === 'true') {
             // Already shown during this page session – skip animation.
             setShowCircuitReveal(false);
             setCircuitComplete(true);
+            setHasVisitedHome(true);
+            window.__circuitRevealShown = true;
         } else {
             // First time – show animation and set the flag.
+            sessionStorage.setItem('circuitRevealShown', 'true');
             window.__circuitRevealShown = true;
             setShowCircuitReveal(true);
+        }
+
+        // Clear the flag when the user reloads or leaves the page so that a hard refresh
+        // will play the animation again.
+        const handleBeforeUnload = () => {
+            sessionStorage.removeItem('circuitRevealShown');
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
+    // Track home page visits to prevent content animations on subsequent visits
+    useEffect(() => {
+        if (!window.__homePageVisited) {
+            window.__homePageVisited = true;
         }
     }, []);
 
@@ -310,8 +335,8 @@ const Home = () => {
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.3,
-                delayChildren: showCircuitReveal ? (circuitComplete ? 0.5 : 4.0) : 0, // No delay if skipping animation
+                staggerChildren: (window.__homePageVisited || hasVisitedHome) ? 0 : 0.3,
+                delayChildren: (window.__homePageVisited || hasVisitedHome) ? 0 : (showCircuitReveal ? (circuitComplete ? 0.5 : 4.0) : 0),
             },
         },
     };
@@ -322,7 +347,7 @@ const Home = () => {
             opacity: 1,
             y: 0,
             transition: {
-                duration: 0.6,
+                duration: (window.__homePageVisited || hasVisitedHome) ? 0 : 0.6,
                 ease: "easeOut",
             },
         },
@@ -364,7 +389,7 @@ const Home = () => {
                 <Container>
                     <ContentSection
                         variants={containerVariants}
-                        initial="hidden"
+                        initial={hasVisitedHome ? "visible" : "hidden"}
                         animate="visible"
                     >
                         <Greeting variants={itemVariants}>
@@ -452,7 +477,10 @@ const Home = () => {
                     <ImageSection
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8, delay: showCircuitReveal ? (circuitComplete ? 1.0 : 4.5) : 0.5 }}
+                        transition={{ 
+                            duration: (window.__homePageVisited || hasVisitedHome) ? 0 : 0.8, 
+                            delay: (window.__homePageVisited || hasVisitedHome) ? 0 : (showCircuitReveal ? (circuitComplete ? 1.0 : 4.5) : 0.5) 
+                        }}
                     >
                         <ProfileImageContainer>
                             <ProfileImage
@@ -471,7 +499,7 @@ const Home = () => {
                                     duration: 6,
                                     repeat: Infinity,
                                     ease: "easeInOut",
-                                    delay: showCircuitReveal ? (circuitComplete ? 0 : 4.0) : 0,
+                                    delay: (window.__homePageVisited || hasVisitedHome) ? 0 : (showCircuitReveal ? (circuitComplete ? 0 : 4.0) : 0),
                                 }}
                             />
                             <FloatingElement
@@ -483,7 +511,7 @@ const Home = () => {
                                     duration: 4,
                                     repeat: Infinity,
                                     ease: "easeInOut",
-                                    delay: showCircuitReveal ? (circuitComplete ? 1 : 5.0) : 0.5,
+                                    delay: (window.__homePageVisited || hasVisitedHome) ? 0 : (showCircuitReveal ? (circuitComplete ? 1 : 5.0) : 0.5),
                                 }}
                             />
                             <FloatingElement
@@ -495,7 +523,7 @@ const Home = () => {
                                     duration: 8,
                                     repeat: Infinity,
                                     ease: "easeInOut",
-                                    delay: showCircuitReveal ? (circuitComplete ? 2 : 6.0) : 1.0,
+                                    delay: (window.__homePageVisited || hasVisitedHome) ? 0 : (showCircuitReveal ? (circuitComplete ? 2 : 6.0) : 1.0),
                                 }}
                             />
                             <FloatingElement
@@ -507,7 +535,7 @@ const Home = () => {
                                     duration: 5,
                                     repeat: Infinity,
                                     ease: "easeInOut",
-                                    delay: showCircuitReveal ? (circuitComplete ? 0.5 : 4.5) : 0.2,
+                                    delay: (window.__homePageVisited || hasVisitedHome) ? 0 : (showCircuitReveal ? (circuitComplete ? 0.5 : 4.5) : 0.2),
                                 }}
                             />
                             <FloatingElement
@@ -520,7 +548,7 @@ const Home = () => {
                                     duration: 7,
                                     repeat: Infinity,
                                     ease: "easeInOut",
-                                    delay: showCircuitReveal ? (circuitComplete ? 1.5 : 5.5) : 0.8,
+                                    delay: (window.__homePageVisited || hasVisitedHome) ? 0 : (showCircuitReveal ? (circuitComplete ? 1.5 : 5.5) : 0.8),
                                 }}
                             />
                         </ProfileImageContainer>

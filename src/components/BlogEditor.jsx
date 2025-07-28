@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { FiSave, FiPlus, FiEdit, FiTrash2, FiCopy, FiCalendar, FiTag, FiClock } from "react-icons/fi";
+import { FiSave, FiPlus, FiEdit, FiTrash2, FiCopy, FiCalendar, FiTag, FiClock, FiImage } from "react-icons/fi";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighterComponent from "./SyntaxHighlighter";
 import ImageUploadHelper from "./ImageUploadHelper";
 import GradientSelector from "./GradientSelector";
 import MarkdownEditor from "./MarkdownEditor";
+import SlideshowEditor from "./SlideshowEditor";
+import Slideshow from "./Slideshow";
 import { getGradientById } from "../utils/gradients";
 import { createBlogPost } from "../utils/blogDataGenerated";
 
@@ -475,6 +477,7 @@ function hello() {
   const [hasBeenSaved, setHasBeenSaved] = useState(false);
   const [generatedData, setGeneratedData] = useState("");
   const [showGeneratedData, setShowGeneratedData] = useState(false);
+  const [slideshows, setSlideshows] = useState([]);
 
   const clearAllData = () => {
     const hasContent = formData.title.trim() !== "" || 
@@ -559,6 +562,7 @@ function hello() {
     setHasUnsavedChanges(false);
     setShowGeneratedData(false);
     setGeneratedData("");
+    setSlideshows([]);
   };
 
   // Check if there are unsaved changes
@@ -647,6 +651,26 @@ function hello() {
     }));
   };
 
+  // Slideshow management functions
+  const addSlideshow = () => {
+    const newSlideshow = {
+      id: `slideshow-${Date.now()}`,
+      title: `Slideshow ${slideshows.length + 1}`,
+      slides: []
+    };
+    setSlideshows(prev => [...prev, newSlideshow]);
+  };
+
+  const updateSlideshow = (slideshowId, updatedSlideshow) => {
+    setSlideshows(prev => 
+      prev.map(s => s.id === slideshowId ? updatedSlideshow : s)
+    );
+  };
+
+  const deleteSlideshow = (slideshowId) => {
+    setSlideshows(prev => prev.filter(s => s.id !== slideshowId));
+  };
+
   const generateSlug = (title) => {
     return title
       .toLowerCase()
@@ -671,7 +695,8 @@ function hello() {
     const blogPost = {
       ...formData,
       id: parseInt(formData.id) || Date.now(),
-      tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
+      tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+      slideshows: slideshows
     };
 
     const markdownContent = createBlogPost(blogPost);
@@ -687,7 +712,8 @@ function hello() {
     const blogPost = {
       ...formData,
       id: parseInt(formData.id) || Date.now(),
-      tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
+      tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+      slideshows: slideshows
     };
 
     const markdownContent = createBlogPost(blogPost);
@@ -856,6 +882,44 @@ function hello() {
             </Select>
           </FormGroup>
 
+          {/* Slideshows Section */}
+          <FormGroup>
+            <Label>
+              <FiImage style={{ marginRight: '8px' }} />
+              Slideshows
+            </Label>
+            <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block', marginBottom: '12px' }}>
+              Add interactive slideshows to your blog post. Use the comment syntax {'<!-- slideshow:slideshow-id:mode -->'} in your content to embed them.
+              <br />
+              <strong>Example:</strong> {'<!-- slideshow:my-slideshow:buttons -->'} or {'<!-- slideshow:my-slideshow:scroll -->'}
+            </small>
+            
+            {slideshows.map((slideshow) => (
+              <SlideshowEditor
+                key={slideshow.id}
+                slideshow={slideshow}
+                onSlideshowChange={(updatedSlideshow) => updateSlideshow(slideshow.id, updatedSlideshow)}
+                onDelete={() => deleteSlideshow(slideshow.id)}
+              />
+            ))}
+            
+            <Button
+              type="button"
+              onClick={addSlideshow}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{ 
+                background: 'transparent', 
+                color: '#666', 
+                border: '2px dashed #666',
+                marginTop: '8px'
+              }}
+            >
+              <FiPlus />
+              Add Slideshow
+            </Button>
+          </FormGroup>
+
           <ButtonGroup>
             <Button
               type="submit"
@@ -1012,22 +1076,98 @@ function hello() {
 
             <PreviewContent>
               {formData.content ? (
-                <ReactMarkdown
-                  components={{
-                    code: ({ node, inline, className, children, ...props }) => {
+                (() => {
+                  // Process content to handle slideshow comments
+                  const slideshowRegex = /<!-- slideshow:([^:]+)(?::([^ ]+))? -->/g;
+                  const parts = formData.content.split(slideshowRegex);
+                  
+                  return parts.map((part, index) => {
+                    if (index % 3 === 0) {
+                      // Regular markdown content
                       return (
-                        <SyntaxHighlighterComponent
-                          className={inline ? undefined : className}
-                          {...props}
+                        <ReactMarkdown
+                          key={`preview-content-${index}`}
+                          components={{
+                            code: ({ node, inline, className, children, ...props }) => {
+                              return (
+                                <SyntaxHighlighterComponent
+                                  className={inline ? undefined : className}
+                                  {...props}
+                                >
+                                  {children}
+                                </SyntaxHighlighterComponent>
+                              );
+                            },
+                          }}
                         >
-                          {children}
-                        </SyntaxHighlighterComponent>
+                          {part}
+                        </ReactMarkdown>
                       );
-                    },
-                  }}
-                >
-                  {formData.content}
-                </ReactMarkdown>
+                    } else if (index % 3 === 1) {
+                      // This is a slideshow ID
+                      const slideshowId = part;
+                      const mode = parts[index + 1] || "buttons";
+                      const slideshow = slideshows.find(s => s.id === slideshowId);
+                      
+                      if (!slideshow) {
+                        return (
+                          <div key={`preview-slideshow-${slideshowId}-${index}`} style={{ 
+                            padding: '20px', 
+                            background: '#f0f0f0', 
+                            borderRadius: '8px', 
+                            margin: '20px 0',
+                            textAlign: 'center',
+                            color: '#666'
+                          }}>
+                            <FiImage style={{ fontSize: '24px', marginBottom: '8px' }} />
+                            <p>Slideshow "{slideshowId}" not found</p>
+                            <small>Create a slideshow with this ID to see it here</small>
+                          </div>
+                        );
+                      }
+
+                      // Transform slideshow data to Slideshow component format
+                      const slides = slideshow.slides.map(slide => ({
+                        image: slide.image,
+                        imageTitle: slide.imageTitle,
+                        imageCaption: slide.imageCaption,
+                        content: (
+                          <div>
+                            <h3>{slide.content.title}</h3>
+                            <p>{slide.content.description}</p>
+                            {slide.content.points && (
+                              <ul>
+                                {slide.content.points.map((point, index) => (
+                                  <li key={index}>{point}</li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        )
+                      }));
+
+                      return (
+                        <Slideshow
+                          key={`preview-slideshow-${slideshowId}-${mode}-${index}`}
+                          slides={slides}
+                          autoPlay={false}
+                          showIndicators={true}
+                          showNavigation={true}
+                          height="400px"
+                          mode={mode}
+                          showImageText={false}
+                          imageFitMode="contain"
+                          fullBleed={false}
+                          zoomEnabled={false}
+                          autoSlide={false}
+                          autoSlideInterval={5000}
+                        />
+                      );
+                    }
+                    // Skip the mode part (index % 3 === 2)
+                    return null;
+                  }).filter(Boolean);
+                })()
               ) : (
                 <p style={{ color: '#666', fontStyle: 'italic' }}>Your content will appear here...</p>
               )}

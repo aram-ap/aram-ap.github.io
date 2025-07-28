@@ -9,11 +9,66 @@ date: 2025-07-28
 readTime: 5 min read
 tags: [Web Development, React, Portfolio, Tutorial]
 category: Tutorial
+slideshows: [
+  {
+    id: "development-process",
+    title: "Development Process",
+    slides: [
+      {
+        image: "/images/blog/react-portfolio.png",
+        imageTitle: "React Setup",
+        imageCaption: "Setting up a modern React development environment",
+        content: {
+          title: "Getting Started with React",
+          description: "Setting up your development environment is the first crucial step. We'll use Create React App for a quick start with all the modern tooling configured out of the box.",
+          points: [
+            "Initialize project with Create React App",
+            "Install essential dependencies",
+            "Configure development environment",
+            "Set up project structure"
+          ]
+        }
+      },
+      {
+        image: "/images/blog/me.jpg",
+        imageTitle: "Component Architecture",
+        imageCaption: "Building reusable React components",
+        content: {
+          title: "Component-Based Architecture",
+          description: "React's component-based architecture allows us to build reusable UI elements that can be composed together to create complex interfaces.",
+          points: [
+            "Create reusable components",
+            "Implement proper state management",
+            "Use styled-components for styling",
+            "Add smooth animations with Framer Motion"
+          ]
+        }
+      },
+      {
+        image: "/images/blog/nyc.jpg",
+        imageTitle: "Deployment",
+        imageCaption: "Deploying your portfolio to the web",
+        content: {
+          title: "Going Live",
+          description: "Once your portfolio is complete, it's time to share it with the world. We'll deploy using GitHub Pages for a simple, free hosting solution.",
+          points: [
+            "Build production bundle",
+            "Configure GitHub Pages",
+            "Set up custom domain (optional)",
+            "Monitor performance and analytics"
+          ]
+        }
+      }
+    ]
+  }
+]
 ---
 
 # Building a Modern Portfolio with React
 
 Constructing an effective portfolio is, frankly, non-negotiable if you're aiming to distinguish yourself in today's competitive landscape. If your work isn't visible, it's essentially invisible. React has emerged as a leading framework due to its adaptability and robust performance—qualities that make it particularly well-suited for portfolio development. In this walkthrough, I'll outline how to assemble a sleek, contemporary portfolio utilizing React, styled-components, and Framer Motion.
+
+<!-- slideshow:development-process:buttons -->
 
 ## Getting Started
 

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighterComponent from "../components/SyntaxHighlighter";
+import Slideshow from "../components/Slideshow";
 import { FiArrowLeft, FiCalendar, FiTag, FiClock } from "react-icons/fi";
 import { getPostBySlug, formatDate } from "../utils/blogDataGenerated";
 import { getGradientById } from "../utils/gradients";
@@ -131,6 +132,64 @@ const Tag = styled.span`
   font-weight: ${(props) => props.theme.typography.fontWeights.medium};
 `;
 
+const SlideshowComponent = ({ slideshowId, post, mode = "buttons" }) => {
+  if (!post.slideshows || !slideshowId) return null;
+  
+  const slideshow = post.slideshows.find(s => s.id === slideshowId);
+  if (!slideshow) return null;
+
+  // Transform slideshow data to Slideshow component format
+  const slides = slideshow.slides.map(slide => ({
+    image: slide.image,
+    imageTitle: slide.imageTitle,
+    imageCaption: slide.imageCaption,
+    content: (
+      <div>
+        <h3>{slide.content.title}</h3>
+        <p>{slide.content.description}</p>
+        {slide.content.points && (
+          <ul>
+            {slide.content.points.map((point, index) => (
+              <li key={index}>{point}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    )
+  }));
+
+  return (
+    <Slideshow
+      slides={slides}
+      autoPlay={false}
+      showIndicators={true}
+      showNavigation={true}
+      height="600px"
+      mode={mode}
+      showImageText={false}
+      imageFitMode="cover"
+      fullBleed={false}
+      zoomEnabled={false}
+      autoSlide={false}
+      autoSlideInterval={5000}
+    />
+  );
+};
+
+const customComponents = (post) => ({
+  // Handle code blocks with syntax highlighting
+  code: ({ node, inline, className, children, ...props }) => {
+    return (
+      <SyntaxHighlighterComponent
+        className={inline ? undefined : className}
+        {...props}
+      >
+        {children}
+      </SyntaxHighlighterComponent>
+    );
+  },
+});
+
 const Content = styled(motion.div).withConfig({
   shouldForwardProp: (prop) => !['variants', 'initial', 'animate', 'exit', 'transition'].includes(prop)
 })`
@@ -139,6 +198,12 @@ const Content = styled(motion.div).withConfig({
   padding: ${(props) => props.theme.spacing.xl};
   border: 1px solid ${(props) => props.theme.colors.border};
   line-height: ${(props) => props.theme.typography.lineHeights.relaxed};
+  
+  @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    margin: 0 ${(props) => props.theme.spacing.lg};
+    border-radius: 12px;
+    padding: ${(props) => props.theme.spacing.lg};
+  }
 
   /* Markdown styling */
   h1, h2, h3, h4, h5, h6 {
@@ -342,22 +407,39 @@ const BlogPost = () => {
           )}
 
           <Content variants={itemVariants}>
-            <ReactMarkdown
-              components={{
-                code: ({ node, inline, className, children, ...props }) => {
+            {(() => {
+              // Process content to handle slideshow comments
+              const slideshowRegex = /<!-- slideshow:([^:]+)(?::([^ ]+))? -->/g;
+              const parts = post.content.split(slideshowRegex);
+              
+              return parts.map((part, index) => {
+                if (index % 3 === 0) {
+                  // Regular markdown content
                   return (
-                    <SyntaxHighlighterComponent
-                      className={inline ? undefined : className}
-                      {...props}
+                    <ReactMarkdown
+                      key={`content-${index}`}
+                      components={customComponents(post)}
                     >
-                      {children}
-                    </SyntaxHighlighterComponent>
+                      {part}
+                    </ReactMarkdown>
                   );
-                },
-              }}
-            >
-              {post.content}
-            </ReactMarkdown>
+                } else if (index % 3 === 1) {
+                  // This is a slideshow ID
+                  const slideshowId = part;
+                  const mode = parts[index + 1] || "buttons";
+                  return (
+                    <SlideshowComponent 
+                      key={`slideshow-${slideshowId}-${mode}-${index}`}
+                      slideshowId={slideshowId} 
+                      post={post}
+                      mode={mode}
+                    />
+                  );
+                }
+                // Skip the mode part (index % 3 === 2)
+                return null;
+              }).filter(Boolean);
+            })()}
           </Content>
         </motion.div>
       </Container>

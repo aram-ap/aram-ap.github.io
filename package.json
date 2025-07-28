@@ -4,12 +4,13 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run build-blog && vite",
-    "build": "npm run build-blog && vite build",
+    "dev": "npm run build-blog && npm run build-projects && vite",
+    "build": "npm run build-blog && npm run build-projects && vite build",
     "postbuild": "node scripts/copy404.js",
     "preview": "vite preview",
     "add-post": "node scripts/add-blog-post.js",
     "build-blog": "node scripts/build-blog.js",
+    "build-projects": "node scripts/build-projects.js",
     "create-post": "node scripts/create-blog-post.js"
   },
   "repository": {
@@ -50,7 +51,10 @@
     "vite": "^7.0.5"
   },
   "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
     "gh-pages": "^6.3.0",
-    "gray-matter": "^4.0.3"
+    "gray-matter": "^4.0.3",
+    "typescript": "^5.8.3"
   }
 }

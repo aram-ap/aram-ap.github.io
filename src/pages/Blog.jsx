@@ -106,6 +106,32 @@ const FilterButton = styled(motion.button)`
   }
 `;
 
+const SortSection = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  margin-bottom: ${(props) => props.theme.spacing.xl};
+  gap: ${(props) => props.theme.spacing.md};
+  flex-wrap: wrap;
+`;
+
+const SortButton = styled(motion.button)`
+  padding: ${(props) => props.theme.spacing.sm} ${(props) => props.theme.spacing.md};
+  border: 2px solid ${(props) => props.$active ? props.theme.colors.accent : props.theme.colors.border};
+  background: ${(props) => props.$active ? props.theme.colors.accent : 'transparent'};
+  color: ${(props) => props.$active ? props.theme.colors.text : props.theme.colors.textSecondary};
+  border-radius: 50px;
+  font-weight: ${(props) => props.theme.typography.fontWeights.medium};
+  display: flex;
+  align-items: center;
+  gap: ${(props) => props.theme.spacing.xs};
+  transition: all ${(props) => props.theme.animations.normal};
+
+  &:hover {
+    border-color: ${(props) => props.theme.colors.accent};
+    color: ${(props) => props.theme.colors.accent};
+  }
+`;
+
 const BlogGrid = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -116,7 +142,7 @@ const BlogGrid = styled(motion.div)`
   }
 `;
 
-const BlogCard = styled(motion.create(Link))`
+const BlogCard = styled(motion.div)`
   background: ${(props) => props.theme.colors.backgroundSecondary};
   border-radius: 16px;
   overflow: hidden;
@@ -180,10 +206,19 @@ const BlogMeta = styled.div`
   color: ${(props) => props.theme.colors.textSecondary};
 `;
 
-const MetaItem = styled.span`
+const BlogDate = styled.span`
   display: flex;
   align-items: center;
   gap: ${(props) => props.theme.spacing.xs};
+`;
+
+const BlogCategory = styled.span`
+  background: ${(props) => props.theme.colors.backgroundTertiary};
+  color: ${(props) => props.theme.colors.accent};
+  padding: ${(props) => props.theme.spacing.xs} ${(props) => props.theme.spacing.sm};
+  border-radius: 20px;
+  font-size: ${(props) => props.theme.typography.fontSizes.sm};
+  font-weight: ${(props) => props.theme.typography.fontWeights.medium};
 `;
 
 const BlogTitle = styled.h3`
@@ -215,13 +250,19 @@ const BlogTag = styled.span`
   font-weight: ${(props) => props.theme.typography.fontWeights.medium};
 `;
 
-const ReadMore = styled(motion.div)`
+const BlogLink = styled.div`
   display: flex;
   align-items: center;
   gap: ${(props) => props.theme.spacing.xs};
   color: ${(props) => props.theme.colors.accent};
   font-weight: ${(props) => props.theme.typography.fontWeights.medium};
   font-size: ${(props) => props.theme.typography.fontSizes.sm};
+  text-decoration: none;
+  margin-top: ${(props) => props.theme.spacing.md};
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const EmptyState = styled(motion.div)`
@@ -268,25 +309,47 @@ const EditorSection = styled(motion.div)`
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
+  const [activeSort, setActiveSort] = useState("date");
+  const [sortDirection, setSortDirection] = useState("desc");
+
   const navigate = useNavigate();
-
-  const handleOpenEditor = () => {
-    navigate('/blog-editor');
-  };
-
   const categories = getCategories();
 
+  // Filter and search posts
   const filteredPosts = blogPosts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-
+    const matchesSearch = searchTerm === "" || 
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    
     const matchesCategory = activeFilter === "All" || post.category === activeFilter;
-
+    
     return matchesSearch && matchesCategory;
   });
 
+  // Sort posts
+  const sortedPosts = [...filteredPosts].sort((a, b) => {
+    let comparison = 0;
+    
+    switch (activeSort) {
+      case "name":
+        comparison = a.title.localeCompare(b.title);
+        break;
+      case "date":
+        const aDate = new Date(a.date);
+        const bDate = new Date(b.date);
+        comparison = aDate - bDate;
+        break;
+      default:
+        comparison = 0;
+    }
+    
+    return sortDirection === "asc" ? comparison : -comparison;
+  });
 
+  const handleOpenEditor = () => {
+    navigate("/blog-editor");
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -294,19 +357,31 @@ const Blog = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.1,
+      },
+    },
+    exit: {
+      opacity: 0,
+      transition: {
+        staggerChildren: 0.05,
+        staggerDirection: -1,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: "easeOut",
+        duration: 0.5,
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: -20,
+      transition: {
+        duration: 0.3,
       },
     },
   };
@@ -318,7 +393,6 @@ const Blog = () => {
       scale: 1,
       transition: {
         duration: 0.5,
-        ease: "easeOut",
       },
     },
   };
@@ -332,9 +406,11 @@ const Blog = () => {
           animate="visible"
         >
           <Header>
-            <Title variants={itemVariants}>Blog</Title>
+            <Title variants={itemVariants}>
+              Blog
+            </Title>
             <Subtitle variants={itemVariants}>
-              Thoughts, tutorials, and insights on technology, space exploration, and web development.
+              Thoughts, tutorials, and insights from my journey in technology
             </Subtitle>
           </Header>
 
@@ -348,7 +424,7 @@ const Blog = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </SearchInput>
-
+            
             {categories.map((category) => (
               <FilterButton
                 key={category}
@@ -363,61 +439,89 @@ const Blog = () => {
             ))}
           </SearchSection>
 
+          <SortSection variants={itemVariants}>
+            <SortButton
+              $active={activeSort === "name"}
+              onClick={() => {
+                setActiveSort("name");
+                setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Name {activeSort === "name" && (sortDirection === "asc" ? "↑" : "↓")}
+            </SortButton>
+            <SortButton
+              $active={activeSort === "date"}
+              onClick={() => {
+                setActiveSort("date");
+                setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Date {activeSort === "date" && (sortDirection === "asc" ? "↑" : "↓")}
+            </SortButton>
+          </SortSection>
+
           <AnimatePresence mode="wait">
-            {filteredPosts.length > 0 ? (
+            {sortedPosts.length > 0 ? (
               <BlogGrid
-                key={`${searchTerm}-${activeFilter}`}
+                key={`${activeFilter}-${activeSort}-${sortDirection}-${searchTerm}`}
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
+                exit="exit"
               >
-                {filteredPosts.map((post) => (
+                {sortedPosts.map((post) => (
                   <BlogCard
-                    key={post.id}
-                    to={`/blog/${post.slug}`}
+                    key={post.slug}
+                    onClick={() => navigate(`/blog/${post.slug}`)}
                     variants={cardVariants}
                     whileHover={{ y: -8 }}
                     layout
                   >
-                    <BlogImage>
-                      {post.featuredImage && post.featuredImage.trim() !== "" ? (
-                        <img src={post.featuredImage} alt={post.title} />
-                      ) : (
-                        <div style={{
-                          width: '100%',
-                          height: '100%',
-                          background: getGradientById(post.gradientId || "default").value
-                        }} />
+                    <BlogImage $gradient={post.gradientId ? getGradientById(post.gradientId).value : undefined}>
+                      {post.featuredImage && (
+                        <img 
+                          src={post.featuredImage} 
+                          alt={post.title}
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            const gradient = post.gradientId 
+                              ? getGradientById(post.gradientId).value 
+                              : `linear-gradient(135deg, #6c5ce7, #00b894)`;
+                            e.target.parentElement.style.background = gradient;
+                          }}
+                        />
                       )}
                     </BlogImage>
+                    
                     <BlogContent>
                       <BlogMeta>
-                        <MetaItem>
+                        <BlogDate>
                           <FiCalendar />
                           {formatDate(post.date)}
-                        </MetaItem>
-                        <MetaItem>
-                          <FiTag />
-                          {post.category}
-                        </MetaItem>
+                        </BlogDate>
+                        <BlogCategory>{post.category}</BlogCategory>
                       </BlogMeta>
-
+                      
                       <BlogTitle>{post.title}</BlogTitle>
                       <BlogExcerpt>{post.excerpt}</BlogExcerpt>
-
+                      
                       <BlogTags>
-                        {post.tags.map((tag, index) => (
+                        {post.tags.slice(0, 3).map((tag, index) => (
                           <BlogTag key={index}>{tag}</BlogTag>
                         ))}
+                        {post.tags.length > 3 && (
+                          <BlogTag>+{post.tags.length - 3} more</BlogTag>
+                        )}
                       </BlogTags>
-
-                      <ReadMore
-                        whileHover={{ x: 5 }}
-                        transition={{ duration: 0.2 }}
-                      >
+                      
+                      <BlogLink>
                         Read More
                         <FiArrowRight />
-                      </ReadMore>
+                      </BlogLink>
                     </BlogContent>
                   </BlogCard>
                 ))}
@@ -428,23 +532,23 @@ const Blog = () => {
                 variants={itemVariants}
                 initial="hidden"
                 animate="visible"
+                exit="exit"
               >
                 <h3>No posts found</h3>
-                <p>Try adjusting your search terms or filters.</p>
+                <p>Try adjusting your search or filter criteria.</p>
               </EmptyState>
             )}
           </AnimatePresence>
 
-          <EditorSection variants={itemVariants}>
-            <EditorButton
-              onClick={handleOpenEditor}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <FiEdit3 />
-              Create Blog Post
-            </EditorButton>
-          </EditorSection>
+          <EditorButton
+            onClick={handleOpenEditor}
+            variants={itemVariants}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FiEdit3 />
+            Write New Post
+          </EditorButton>
         </motion.div>
       </Container>
     </BlogContainer>

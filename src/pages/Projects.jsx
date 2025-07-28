@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiGithub, FiExternalLink, FiFilter } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import { FiGithub, FiExternalLink, FiFilter, FiFileText, FiCode, FiChevronRight, FiCalendar, FiClock, FiCheckCircle, FiPlayCircle, FiTarget } from "react-icons/fi";
+import { projects, getCategories } from "../utils/projectDataGenerated";
+import { getGradientById } from "../utils/gradients";
 
 /**
  * Projects page component with filtering and animated project cards
  * Features: category filtering, hover animations, responsive grid layout
+ * Two types of projects: detailed (opens markdown page) and github-only (just GitHub link)
  */
 
 const ProjectsContainer = styled.main`
@@ -67,6 +71,33 @@ const FilterButton = styled(motion.button)`
   }
 `;
 
+const SortSection = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  margin-bottom: ${(props) => props.theme.spacing.lg};
+  gap: ${(props) => props.theme.spacing.md};
+  flex-wrap: wrap;
+`;
+
+const SortButton = styled(motion.button)`
+  padding: ${(props) => props.theme.spacing.xs} ${(props) => props.theme.spacing.sm};
+  border: 1px solid ${(props) => props.theme.colors.border};
+  background: ${(props) => props.$active ? props.theme.colors.accent : 'transparent'};
+  color: ${(props) => props.$active ? props.theme.colors.text : props.theme.colors.textSecondary};
+  border-radius: 20px;
+  font-size: ${(props) => props.theme.typography.fontSizes.sm};
+  font-weight: ${(props) => props.theme.typography.fontWeights.medium};
+  display: flex;
+  align-items: center;
+  gap: ${(props) => props.theme.spacing.xs};
+  transition: all ${(props) => props.theme.animations.normal};
+
+  &:hover {
+    border-color: ${(props) => props.theme.colors.accent};
+    color: ${(props) => props.theme.colors.accent};
+  }
+`;
+
 const ProjectsGrid = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -84,6 +115,7 @@ const ProjectCard = styled(motion.div)`
   border: 1px solid ${(props) => props.theme.colors.border};
   transition: all ${(props) => props.theme.animations.normal};
   cursor: pointer;
+  position: relative;
 
   &:hover {
     transform: translateY(-8px);
@@ -92,11 +124,68 @@ const ProjectCard = styled(motion.div)`
   }
 `;
 
+const ProjectTypeIndicator = styled.div`
+  position: absolute;
+  top: ${(props) => props.theme.spacing.md};
+  right: ${(props) => props.theme.spacing.md};
+  background: ${(props) => props.$type === 'detailed' ? props.theme.colors.accent : props.theme.colors.secondary};
+  color: ${(props) => props.theme.colors.text};
+  padding: ${(props) => props.theme.spacing.xs} ${(props) => props.theme.spacing.sm};
+  border-radius: 20px;
+  font-size: ${(props) => props.theme.typography.fontSizes.xs};
+  font-weight: ${(props) => props.theme.typography.fontWeights.medium};
+  display: flex;
+  align-items: center;
+  gap: ${(props) => props.theme.spacing.xs};
+  z-index: 10;
+`;
+
+const ProgressTag = styled.div`
+  position: absolute;
+  top: ${(props) => props.theme.spacing.md};
+  left: ${(props) => props.theme.spacing.md};
+  background: ${(props) => {
+    switch (props.$progress) {
+      case 'completed': return props.theme.colors.success;
+      case 'in-progress': return props.theme.colors.warning;
+      case 'planned': return props.theme.colors.info;
+      default: return props.theme.colors.secondary;
+    }
+  }};
+  color: ${(props) => {
+    switch (props.$progress) {
+      case 'completed': return '#ffffff';
+      case 'in-progress': return '#000000';
+      case 'planned': return '#ffffff';
+      default: return props.theme.colors.text;
+    }
+  }};
+  padding: ${(props) => props.theme.spacing.xs} ${(props) => props.theme.spacing.sm};
+  border-radius: 20px;
+  font-size: ${(props) => props.theme.typography.fontSizes.xs};
+  font-weight: ${(props) => props.theme.typography.fontWeights.medium};
+  display: flex;
+  align-items: center;
+  gap: ${(props) => props.theme.spacing.xs};
+  z-index: 10;
+`;
+
 const ProjectImage = styled.div`
   height: 200px;
-  background: linear-gradient(135deg, ${(props) => props.theme.colors.accent}, ${(props) => props.theme.colors.success});
+  background: ${(props) => props.$gradient ? props.$gradient : `linear-gradient(135deg, ${props.theme.colors.accent}, ${props.theme.colors.success})`};
   position: relative;
   overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform ${(props) => props.theme.animations.normal};
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
 
   &::after {
     content: '';
@@ -125,10 +214,32 @@ const ProjectTitle = styled.h3`
   margin-bottom: ${(props) => props.theme.spacing.sm};
 `;
 
+const ProjectSubtitle = styled.p`
+  color: ${(props) => props.theme.colors.accent};
+  font-size: ${(props) => props.theme.typography.fontSizes.sm};
+  margin-bottom: ${(props) => props.theme.spacing.sm};
+  font-weight: ${(props) => props.theme.typography.fontWeights.medium};
+`;
+
 const ProjectDescription = styled.p`
   color: ${(props) => props.theme.colors.textSecondary};
   margin-bottom: ${(props) => props.theme.spacing.md};
   line-height: ${(props) => props.theme.typography.lineHeights.relaxed};
+`;
+
+const ProjectDates = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${(props) => props.theme.spacing.sm};
+  margin-bottom: ${(props) => props.theme.spacing.md};
+  font-size: ${(props) => props.theme.typography.fontSizes.xs};
+  color: ${(props) => props.theme.colors.textSecondary};
+`;
+
+const DateItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${(props) => props.theme.spacing.xs};
 `;
 
 const TechStack = styled.div`
@@ -156,16 +267,37 @@ const ProjectLink = styled(motion.a)`
   display: flex;
   align-items: center;
   gap: ${(props) => props.theme.spacing.xs};
-  color: ${(props) => props.theme.colors.textSecondary};
+  color: ${(props) => props.theme.colors.accent};
   font-size: ${(props) => props.theme.typography.fontSizes.sm};
   font-weight: ${(props) => props.theme.typography.fontWeights.medium};
-  padding: ${(props) => props.theme.spacing.xs} ${(props) => props.theme.spacing.sm};
+  padding: ${(props) => props.theme.spacing.sm} ${(props) => props.theme.spacing.md};
+  border: 2px solid ${(props) => props.theme.colors.accent};
   border-radius: 8px;
   transition: all ${(props) => props.theme.animations.normal};
 
   &:hover {
-    color: ${(props) => props.theme.colors.accent};
-    background: ${(props) => props.theme.colors.accentLight};
+    color: ${(props) => props.theme.colors.text};
+    background: ${(props) => props.theme.colors.accent};
+    transform: translateY(-2px);
+  }
+`;
+
+const ProjectButton = styled(motion.button)`
+  display: flex;
+  align-items: center;
+  gap: ${(props) => props.theme.spacing.xs};
+  color: ${(props) => props.theme.colors.text};
+  font-size: ${(props) => props.theme.typography.fontSizes.sm};
+  font-weight: ${(props) => props.theme.typography.fontWeights.medium};
+  padding: ${(props) => props.theme.spacing.sm} ${(props) => props.theme.spacing.md};
+  background: ${(props) => props.theme.colors.accent};
+  border: none;
+  border-radius: 8px;
+  transition: all ${(props) => props.theme.animations.normal};
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
   }
 `;
 
@@ -177,69 +309,77 @@ const EmptyState = styled(motion.div)`
 
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState("All");
+  const [activeSort, setActiveSort] = useState("name");
+  const [sortDirection, setSortDirection] = useState("asc");
 
-  const projects = [
-    {
-      id: 1,
-      title: "E-Commerce Platform",
-      description: "A full-stack e-commerce solution with payment integration, inventory management, and admin dashboard.",
-      category: "Full Stack",
-      tech: ["React", "Node.js", "MongoDB", "Stripe"],
-      github: "https://github.com/aram-ap/ecommerce",
-      live: "https://ecommerce-demo.com"
-    },
-    {
-      id: 2,
-      title: "Task Management App",
-      description: "Collaborative task management tool with real-time updates, team features, and progress tracking.",
-      category: "Frontend",
-      tech: ["React", "TypeScript", "Firebase", "Framer Motion"],
-      github: "https://github.com/aram-ap/task-manager",
-      live: "https://taskmanager-demo.com"
-    },
-    {
-      id: 3,
-      title: "Weather Dashboard",
-      description: "Beautiful weather application with location-based forecasts, interactive maps, and detailed analytics.",
-      category: "Frontend",
-      tech: ["Next.js", "Tailwind CSS", "OpenWeather API"],
-      github: "https://github.com/aram-ap/weather-dashboard",
-      live: "https://weather-demo.com"
-    },
-    {
-      id: 4,
-      title: "Restaurant API",
-      description: "RESTful API for restaurant management with menu handling, order processing, and user authentication.",
-      category: "Backend",
-      tech: ["Node.js", "Express", "PostgreSQL", "JWT"],
-      github: "https://github.com/aram-ap/restaurant-api",
-      live: null
-    },
-    {
-      id: 5,
-      title: "Social Media Dashboard",
-      description: "Analytics dashboard for social media management with data visualization and automated reporting.",
-      category: "Full Stack",
-      tech: ["Vue.js", "Python", "Django", "Chart.js"],
-      github: "https://github.com/aram-ap/social-dashboard",
-      live: "https://social-dashboard-demo.com"
-    },
-    {
-      id: 6,
-      title: "Chat Application",
-      description: "Real-time chat application with group messaging, file sharing, and video call integration.",
-      category: "Full Stack",
-      tech: ["React", "Socket.io", "Node.js", "WebRTC"],
-      github: "https://github.com/aram-ap/chat-app",
-      live: "https://chat-demo.com"
+  const categories = getCategories();
+  const progressOptions = ["All", "completed", "in-progress", "planned"];
+
+  // Filter projects by category and progress
+  const filteredProjects = projects.filter(project => {
+    const categoryMatch = activeFilter === "All" || project.category === activeFilter;
+    return categoryMatch;
+  });
+
+  // Sort projects
+  const sortedProjects = [...filteredProjects].sort((a, b) => {
+    let comparison = 0;
+    
+    switch (activeSort) {
+      case "name":
+        comparison = a.title.localeCompare(b.title);
+        break;
+      case "date":
+        const aDate = a.dateStarted ? new Date(a.dateStarted) : new Date(0);
+        const bDate = b.dateStarted ? new Date(b.dateStarted) : new Date(0);
+        comparison = aDate - bDate;
+        break;
+      case "progress":
+        const progressOrder = { 'planned': 0, 'in-progress': 1, 'completed': 2 };
+        comparison = (progressOrder[a.progress] || 0) - (progressOrder[b.progress] || 0);
+        break;
+      default:
+        comparison = 0;
     }
-  ];
+    
+    return sortDirection === "asc" ? comparison : -comparison;
+  });
 
-  const filters = ["All", "Frontend", "Backend", "Full Stack"];
+  const handleProjectClick = (project) => {
+    if (project.type === 'detailed') {
+      window.location.href = `/projects/${project.slug}`;
+    } else if (project.github) {
+      window.open(project.github, '_blank');
+    }
+  };
 
-  const filteredProjects = activeFilter === "All"
-    ? projects
-    : projects.filter(project => project.category === activeFilter);
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  };
+
+  const getProgressIcon = (progress) => {
+    switch (progress) {
+      case 'completed': return <FiCheckCircle />;
+      case 'in-progress': return <FiPlayCircle />;
+      case 'planned': return <FiTarget />;
+      default: return <FiClock />;
+    }
+  };
+
+  const getProgressText = (progress) => {
+    switch (progress) {
+      case 'completed': return 'Completed';
+      case 'in-progress': return 'In Progress';
+      case 'planned': return 'Planned';
+      default: return 'Unknown';
+    }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -247,19 +387,31 @@ const Projects = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.1,
+      },
+    },
+    exit: {
+      opacity: 0,
+      transition: {
+        staggerChildren: 0.05,
+        staggerDirection: -1,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: "easeOut",
+        duration: 0.5,
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: -20,
+      transition: {
+        duration: 0.3,
       },
     },
   };
@@ -271,14 +423,6 @@ const Projects = () => {
       scale: 1,
       transition: {
         duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.9,
-      transition: {
-        duration: 0.3,
       },
     },
   };
@@ -292,73 +436,159 @@ const Projects = () => {
           animate="visible"
         >
           <Header>
-            <Title variants={itemVariants}>My Projects</Title>
+            <Title variants={itemVariants}>
+              Projects
+            </Title>
             <Subtitle variants={itemVariants}>
-              A collection of my recent work showcasing various technologies and creative solutions. **[UNDER CONSTRUCTION]**
+              A collection of my work, from space missions to web applications
             </Subtitle>
           </Header>
 
           <FilterSection variants={itemVariants}>
-            {filters.map((filter) => (
+            {categories.map((category) => (
               <FilterButton
-                key={filter}
-                $active={activeFilter === filter}
-                onClick={() => setActiveFilter(filter)}
+                key={category}
+                $active={activeFilter === category}
+                onClick={() => setActiveFilter(category)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <FiFilter />
-                {filter}
+                {category}
               </FilterButton>
             ))}
           </FilterSection>
 
+          <SortSection variants={itemVariants}>
+            <SortButton
+              $active={activeSort === "name"}
+              onClick={() => {
+                setActiveSort("name");
+                setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Name {activeSort === "name" && (sortDirection === "asc" ? "↑" : "↓")}
+            </SortButton>
+            <SortButton
+              $active={activeSort === "date"}
+              onClick={() => {
+                setActiveSort("date");
+                setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Date {activeSort === "date" && (sortDirection === "asc" ? "↑" : "↓")}
+            </SortButton>
+            <SortButton
+              $active={activeSort === "progress"}
+              onClick={() => {
+                setActiveSort("progress");
+                setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Progress {activeSort === "progress" && (sortDirection === "asc" ? "↑" : "↓")}
+            </SortButton>
+          </SortSection>
+
           <AnimatePresence mode="wait">
-            {filteredProjects.length > 0 ? (
+            {sortedProjects.length > 0 ? (
               <ProjectsGrid
-                key={activeFilter}
+                key={`${activeFilter}-${activeSort}-${sortDirection}`}
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
               >
-                {filteredProjects.map((project) => (
+                {sortedProjects.map((project) => (
                   <ProjectCard
                     key={project.id}
                     variants={cardVariants}
                     whileHover={{ y: -8 }}
                     layout
+                    onClick={() => handleProjectClick(project)}
                   >
-                    <ProjectImage />
+                    {project.type === 'detailed' && (
+                      <ProjectTypeIndicator $type={project.type}>
+                        <FiChevronRight />
+                        More
+                      </ProjectTypeIndicator>
+                    )}
+                    
+                    <ProgressTag $progress={project.progress}>
+                      {getProgressIcon(project.progress)}
+                      {getProgressText(project.progress)}
+                    </ProgressTag>
+                    
+                    <ProjectImage $gradient={project.gradientId ? getGradientById(project.gradientId).value : undefined}>
+                      {project.featuredImage && project.featuredImage.trim() !== "" && (
+                        <img 
+                          src={project.featuredImage} 
+                          alt={project.title}
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            const gradient = project.gradientId 
+                              ? getGradientById(project.gradientId).value 
+                              : `linear-gradient(135deg, #6c5ce7, #00b894)`;
+                            e.target.parentElement.style.background = gradient;
+                          }}
+                        />
+                      )}
+                    </ProjectImage>
                     <ProjectContent>
                       <ProjectTitle>{project.title}</ProjectTitle>
-                      <ProjectDescription>{project.description}</ProjectDescription>
+                      <ProjectSubtitle>{project.subtitle}</ProjectSubtitle>
+                      <ProjectDescription>
+                        {project.excerpt || (project.type === 'detailed' 
+                          ? 'Click to view detailed project information and documentation.'
+                          : 'Click to view the project on GitHub.'
+                        )}
+                      </ProjectDescription>
+
+                      <ProjectDates>
+                        <DateItem>
+                          <FiCalendar />
+                          {formatDate(project.dateStarted)}
+                        </DateItem>
+                        {project.dateEnd && (
+                          <DateItem>
+                            <FiClock />
+                            {formatDate(project.dateEnd)}
+                          </DateItem>
+                        )}
+                      </ProjectDates>
 
                       <TechStack>
-                        {project.tech.map((tech, index) => (
+                        {project.tech.slice(0, 5).map((tech, index) => (
                           <TechTag key={index}>{tech}</TechTag>
                         ))}
+                        {project.tech.length > 5 && (
+                          <TechTag>+{project.tech.length - 5} more</TechTag>
+                        )}
                       </TechStack>
 
                       <ProjectLinks>
-                        <ProjectLink
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ scale: 1.05 }}
-                        >
-                          <FiGithub />
-                          Code
-                        </ProjectLink>
-                        {project.live && (
+                        {project.type === 'detailed' ? (
+                          <ProjectButton
+                            whileHover={{ scale: 1.05 }}
+                          >
+                            <FiFileText />
+                            View Details
+                          </ProjectButton>
+                        ) : (
                           <ProjectLink
-                            href={project.live}
+                            href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
                             whileHover={{ scale: 1.05 }}
+                            onClick={(e) => e.stopPropagation()}
                           >
-                            <FiExternalLink />
-                            Live Demo
+                            <FiGithub />
+                            View on GitHub
                           </ProjectLink>
                         )}
                       </ProjectLinks>
