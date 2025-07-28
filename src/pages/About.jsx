@@ -3,6 +3,11 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FiCode, FiDatabase, FiGlobe, FiTool, FiZap} from "react-icons/fi";
 
+/**
+ * About page component showcasing skills, experience, and background
+ * Features: animated sections, skill categories, statistics, responsive layout
+ */
+
 const AboutContainer = styled.main`
   padding-top: 120px;
   padding-bottom: ${(props) => props.theme.spacing.xxl};

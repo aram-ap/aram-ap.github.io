@@ -15,7 +15,7 @@ const Navigation = styled(motion.div)`
   margin-bottom: ${(props) => props.theme.spacing.xl};
 `;
 
-const BackButton = styled(motion(Link))`
+const BackButton = styled(motion.create(Link))`
   display: inline-flex;
   align-items: center;
   gap: ${(props) => props.theme.spacing.sm};
@@ -179,183 +179,175 @@ const AchievementsList = styled.ul`
 `;
 
 const NASARockSat2024 = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1,
-      },
-    },
-  };
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2,
+                delayChildren: 0.1,
+            },
+        },
+    };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.6,
+                ease: "easeOut",
+            },
+        },
+    };
 
-  const techStack = [
-    "C++", "Python", "Arduino", "Embedded Systems",
-    "Real-time Programming", "Sensor Integration", "Data Logging",
-    "Flight Software", "Mission Planning", "Testing & Validation"
-  ];
+    const techStack = [
+        "C++", "Python", "Arduino", "Embedded Systems",
+        "Real-time Programming", "Sensor Integration", "Data Logging",
+        "Flight Software", "Mission Planning", "Testing & Validation"
+    ];
 
-  return (
-    <ProjectContainer>
-      <Container>
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <Navigation variants={itemVariants}>
-            <BackButton
-              to="/projects"
-              whileHover={{ x: -4 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              ← Back to Projects
-            </BackButton>
-          </Navigation>
+    return (
+        <ProjectContainer>
+            <Container>
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    <Navigation variants={itemVariants}>
+                        <BackButton
+                            to="/projects"
+                            whileHover={{ x: -4 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            ← Back to Projects
+                        </BackButton>
+                    </Navigation>
 
-          <Header>
-            <ProjectTitle variants={itemVariants}>
-              NASA RockSat-X 2024
-            </ProjectTitle>
+                    <Header>
+                        <ProjectTitle variants={itemVariants}>
+                            NASA RockSat-X 2024
+                        </ProjectTitle>
 
-            <ProjectSubtitle variants={itemVariants}>
-              Software Lead | Suborbital Research Mission
-            </ProjectSubtitle>
+                        <ProjectSubtitle variants={itemVariants}>
+                            Software Lead | Suborbital Research Mission
+                        </ProjectSubtitle>
 
-            <ProjectYear variants={itemVariants}>
-              <FiCalendar />
-              2024 Mission
-            </ProjectYear>
-          </Header>
+                        <ProjectYear variants={itemVariants}>
+                            <FiCalendar />
+                            2024 Mission
+                        </ProjectYear>
+                    </Header>
 
-          <ContentGrid>
-            <ContentCard variants={itemVariants}>
-              <CardIcon>
-                <FiCode />
-              </CardIcon>
-              <CardTitle>Mission Overview</CardTitle>
-              <CardContent>
-                <p>
-                  Led the software development team for a NASA RockSat-X team, a suborbital
-                  research mission launched from NASA Wallops Flight Facility. Our payload was
-                  designed to conduct atmospheric and space environment research with a deployable capsule at altitudes
-                  exceeding 100km.
-                </p>
-                <p>
-                  As Software Lead, I architected and implemented the flight software systems,
-                  coordinated with hardware teams, and ensured mission-critical code reliability
-                  for the harsh space environment.
-                </p>
-              </CardContent>
-            </ContentCard>
+                    <ContentGrid>
+                        <ContentCard variants={itemVariants}>
+                            <CardIcon>
+                                <FiCode />
+                            </CardIcon>
+                            <CardTitle>Mission Overview</CardTitle>
+                            <CardContent>
+                                <p>
+                                    As a 19-year-old college student, stepping up to lead the software team for NASA's RockSat-X project was both daunting and exhilarating. We developed a payload for a suborbital research mission launching from Wallops Flight Facility, aimed at studying atmospheric and space environments with a deployable capsule reaching over 100km in altitude.
+                                </p>
+                                <p>
+                                    In my role as Software Lead, I designed and implemented the flight software systems, collaborated closely with hardware teams, and focused on ensuring reliability in the demanding space environment. There were tough moments balancing this with my coursework, but pushing through taught me invaluable lessons in resilience.
+                                </p>
+                            </CardContent>
+                        </ContentCard>
 
-            <ContentCard variants={itemVariants}>
-              <CardIcon>
-                <FiUsers />
-              </CardIcon>
-              <CardTitle>Leadership Role</CardTitle>
-              <CardContent>
-                <p>
-                  <strong>Software Team Lead</strong> - Managed a team of 8, establishing coding standards, review processes,
-                  and development workflows.
-                </p>
-                <AchievementsList>
-                  <li>Implemented agile development practices for space mission timeline</li>
-                  <li>Established code review protocols and testing frameworks</li>
-                  <li>Coordinated with NASA engineers and mission controllers</li>
-                  <li>Delivered flight-ready software on schedule for launch window</li>
-                </AchievementsList>
-              </CardContent>
-            </ContentCard>
+                        <ContentCard variants={itemVariants}>
+                            <CardIcon>
+                                <FiUsers />
+                            </CardIcon>
+                            <CardTitle>Leadership Role</CardTitle>
+                            <CardContent>
+                                <p>
+                                    <strong>Software Team Lead</strong> - I guided a team of 8 fellow students, establishing coding standards, review processes, and development workflows while navigating the pressures of college life.
+                                </p>
+                                <AchievementsList>
+                                    <li>Introduced agile practices to meet the rigorous space mission timeline—it took some trial and error, but it kept us on track</li>
+                                    <li>Implemented code review protocols and testing frameworks that prevented major issues</li>
+                                    <li>Collaborated with NASA engineers, an experience that was equal parts intimidating and inspiring</li>
+                                    <li>Delivered flight-ready software on schedule, despite the occasional all-nighter</li>
+                                </AchievementsList>
+                            </CardContent>
+                        </ContentCard>
 
-            <ContentCard variants={itemVariants}>
-              <CardIcon>
-                <FiSend />
-              </CardIcon>
-              <CardTitle>Technical Achievements</CardTitle>
-              <CardContent>
-                <p>
-                  Developed mission-critical software systems capable of operating in the
-                  extreme conditions of suborbital space flight, including:
-                </p>
-                <AchievementsList>
-                  <li>Real-time data acquisition and telemetry systems</li>
-                  <li>Fault-tolerant embedded software architecture</li>
-                  <li>Autonomous experiment control and data logging</li>
-                  <li>Ground communication and command protocols</li>
-                  <li>Pre-flight simulation and testing environments</li>
-                </AchievementsList>
-                <TechStack>
-                  {techStack.map((tech, index) => (
-                    <TechTag key={index}>{tech}</TechTag>
-                  ))}
-                </TechStack>
-              </CardContent>
-            </ContentCard>
+                        <ContentCard variants={itemVariants}>
+                            <CardIcon>
+                                <FiSend />
+                            </CardIcon>
+                            <CardTitle>Technical Achievements</CardTitle>
+                            <CardContent>
+                                <p>
+                                    Creating software resilient enough for suborbital flight conditions was a steep learning curve—I dove deep into embedded systems and fault tolerance. Here's what we accomplished:
+                                </p>
+                                <AchievementsList>
+                                    <li>Real-time data acquisition and telemetry systems built to withstand extreme vibrations</li>
+                                    <li>A fault-tolerant architecture that maintained operations even under stress</li>
+                                    <li>Autonomous experiment control and data logging for the flight duration</li>
+                                    <li>Ground communication protocols that required meticulous refinement</li>
+                                    <li>Pre-flight simulation environments for thorough testing and validation</li>
+                                </AchievementsList>
+                                <TechStack>
+                                    {techStack.map((tech, index) => (
+                                        <TechTag key={index}>{tech}</TechTag>
+                                    ))}
+                                </TechStack>
+                            </CardContent>
+                        </ContentCard>
 
-            <ContentCard variants={itemVariants}>
-              <CardIcon>
-                <FiAward />
-              </CardIcon>
-              <CardTitle>Mission Success</CardTitle>
-              <CardContent>
-                <p>
-                  The RockSat-X 2024 mission was a bitter success with all software systems
-                  performing flawlessly throughout the flight profile, but radio antennas breaking during launch:
-                </p>
-                <AchievementsList>
-                  <li>Executed all planned experiments during microgravity phase</li>
-                  <li>Maintained continuous telemetry throughout flight (Unfortunately no radio communications)</li>
-                  <li>Successfully recovered all data post-flight</li>
-                </AchievementsList>
-              </CardContent>
-            </ContentCard>
-          </ContentGrid>
+                        <ContentCard variants={itemVariants}>
+                            <CardIcon>
+                                <FiAward />
+                            </CardIcon>
+                            <CardTitle>Mission Success</CardTitle>
+                            <CardContent>
+                                <p>
+                                    The 2024 RockSat-X mission achieved its core objectives, though we faced a setback with the radio antennas breaking during launch—it was disappointing, but the software performed without a hitch.
+                                </p>
+                                <AchievementsList>
+                                    <li>Successfully executed all planned experiments in microgravity</li>
+                                    <li>Maintained continuous telemetry throughout the flight, despite the communication challenges</li>
+                                    <li>Recovered all data post-flight, turning potential loss into valuable insights</li>
+                                </AchievementsList>
+                            </CardContent>
+                        </ContentCard>
+                    </ContentGrid>
 
-          <LinksSection variants={itemVariants}>
-            <h3 style={{ marginBottom: '1.5rem', color: '#ffffff' }}>
-              Project Resources & Documentation
-            </h3>
-            <div>
-              <LinkButton
-                href="https://github.com/nasa-rocksat-2024"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FiGithub />
-                View Code Repository
-              </LinkButton>
-              <LinkButton
-                href="https://nasa.gov/rocksat-x"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FiExternalLink />
-                NASA Mission Page
-              </LinkButton>
-            </div>
-          </LinksSection>
-        </motion.div>
-      </Container>
-    </ProjectContainer>
-  );
+                    <LinksSection variants={itemVariants}>
+                        <h3 style={{ marginBottom: '1.5rem', color: '#ffffff' }}>
+                            Project Resources & Documentation
+                        </h3>
+                        <div>
+                            <LinkButton
+                                href="https://github.com/aram-ap/COCRockSatX2024"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <FiGithub />
+                                Github
+                            </LinkButton>
+                            <LinkButton
+                                href="https://www.nasa.gov/wallops/stem/rocksatx/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <FiExternalLink />
+                                NASA Mission Page
+                            </LinkButton>
+                        </div>
+                    </LinksSection>
+                </motion.div>
+            </Container>
+        </ProjectContainer>
+    );
 };
-
 export default NASARockSat2024;
+

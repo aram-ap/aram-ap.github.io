@@ -2,6 +2,12 @@ import React, { useState, useEffect, useMemo, useRef, useLayoutEffect } from "re
 import styled from "styled-components";
 import { motion, AnimatePresence, useReducedMotion, useMotionValue, useTransform, animate } from "framer-motion";
 
+/**
+ * CircuitReveal - Animated circuit board overlay for page transitions
+ * Creates an immersive loading experience with animated circuit traces and pulses
+ * Features: responsive design, reduced motion support, Safari compatibility
+ */
+
 // Full-screen overlay that covers the entire viewport during animation
 const CircuitOverlay = styled(motion.div)`
   position: fixed;

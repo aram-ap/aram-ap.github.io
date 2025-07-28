@@ -3,6 +3,11 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiGithub, FiExternalLink, FiFilter } from "react-icons/fi";
 
+/**
+ * Projects page component with filtering and animated project cards
+ * Features: category filtering, hover animations, responsive grid layout
+ */
+
 const ProjectsContainer = styled.main`
   padding-top: 120px;
   padding-bottom: ${(props) => props.theme.spacing.xxl};

@@ -151,7 +151,7 @@ const NASAProjectButtons = styled.div`
   }
 `;
 
-const NASAProjectButton = styled(motion(Link))`
+const NASAProjectButton = styled(motion.create(Link))`
   background: ${(props) => props.theme.colors.backgroundSecondary};
   color: ${(props) => props.theme.colors.text};
   padding: ${(props) => props.theme.spacing.sm} ${(props) => props.theme.spacing.md};
@@ -275,9 +275,11 @@ const FloatingElement = styled(motion.div)`
 `;
 
 const Home = () => {
+    // Animation state management
     const [circuitComplete, setCircuitComplete] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
-    const [showCircuitReveal, setShowCircuitReveal] = useState(null); // null: checking, true: show animation, false: skip
+    // Circuit reveal animation control: null=checking, true=show, false=skip
+    const [showCircuitReveal, setShowCircuitReveal] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -393,20 +395,20 @@ const Home = () => {
                             <NASAProjectsTitle>Featured NASA Projects</NASAProjectsTitle>
                             <NASAProjectButtons>
                                 <NASAProjectButton
-                                    to="/nasa-rocksat-2024"
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    <FiSend />
-                                    RockSat-X 2024 (Software Lead)
-                                </NASAProjectButton>
-                                <NASAProjectButton
                                     to="/nasa-rocksat-2025"
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                 >
                                     <FiZap />
                                     RockSat-X 2025 (Electrical Lead)
+                                </NASAProjectButton>
+                                <NASAProjectButton
+                                    to="/nasa-rocksat-2024"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    <FiSend />
+                                    RockSat-X 2024 (Software Lead)
                                 </NASAProjectButton>
                             </NASAProjectButtons>
                         </NASAProjectsSection>

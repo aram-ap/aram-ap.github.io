@@ -4,6 +4,11 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
 
+/**
+ * Navigation component with responsive design and smooth animations
+ * Features: transparent to solid background on scroll, mobile menu, active link highlighting
+ */
+
 const Nav = styled(motion.nav)`
   position: fixed;
   top: 0;
@@ -113,7 +118,9 @@ const MobileNavLink = styled(Link)`
 `;
 
 const Navigation = () => {
+  // Track scroll position for background transparency effect
   const [scrolled, setScrolled] = useState(false);
+  // Control mobile menu visibility
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -130,6 +137,7 @@ const Navigation = () => {
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About' },
     { path: '/projects', label: 'Projects' },
+    { path: '/blog', label: 'Blog' },
     { path: '/contact', label: 'Contact' },
   ];
 

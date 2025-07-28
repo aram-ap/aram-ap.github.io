@@ -15,7 +15,7 @@ const Navigation = styled(motion.div)`
   margin-bottom: ${(props) => props.theme.spacing.xl};
 `;
 
-const BackButton = styled(motion(Link))`
+const BackButton = styled(motion.create(Link))`
   display: inline-flex;
   align-items: center;
   gap: ${(props) => props.theme.spacing.sm};
@@ -179,186 +179,203 @@ const AchievementsList = styled.ul`
 `;
 
 const NASARockSat2025 = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1,
-      },
-    },
-  };
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2,
+                delayChildren: 0.1,
+            },
+        },
+    };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.6,
+                ease: "easeOut",
+            },
+        },
+    };
 
-  const techStack = [
-    "PCB Design", "KiCad", "Analog Circuits",
-    "Digital Signal Processing", "Power Systems", "EMI/EMC",
-    "Microcontrollers", "Sensor Interfaces", "Flight Avionics", "Testing & Validation"
-  ];
+    const techStack = [
+        "PCB Design", "KiCad", "Analog Circuits",
+        "Digital Signal Processing", "Power Systems", "EMI/EMC",
+        "Microcontrollers", "Sensor Interfaces", "Flight Avionics", "Testing & Validation"
+    ];
 
-  return (
-    <ProjectContainer>
-      <Container>
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <Navigation variants={itemVariants}>
-            <BackButton
-              to="/projects"
-              whileHover={{ x: -4 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              ← Back to Projects
-            </BackButton>
-          </Navigation>
+    return (
+        <ProjectContainer>
+            <Container>
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    <Navigation variants={itemVariants}>
+                        <BackButton
+                            to="/projects"
+                            whileHover={{ x: -4 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            ← Back to Projects
+                        </BackButton>
+                    </Navigation>
 
-          <Header>
-            <ProjectTitle variants={itemVariants}>
-              NASA RockSat-X 2025
-            </ProjectTitle>
+                    <Header>
+                        <ProjectTitle variants={itemVariants}>
+                            NASA RockSat-X 2025
+                        </ProjectTitle>
 
-            <ProjectSubtitle variants={itemVariants}>
-              Electrical Lead | Next-Generation Payload Systems
-            </ProjectSubtitle>
+                        <ProjectSubtitle variants={itemVariants}>
+                            Electrical Lead | ATLAS \ PHAROS
+                        </ProjectSubtitle>
 
-            <ProjectYear variants={itemVariants}>
-              <FiCalendar />
-              2025 Mission
-            </ProjectYear>
-          </Header>
+                        <ProjectYear variants={itemVariants}>
+                            <FiCalendar />
+                            2025 Mission
+                        </ProjectYear>
+                    </Header>
 
-          <ContentGrid>
-            <ContentCard variants={itemVariants}>
-              <CardIcon>
-                <FiZap />
-              </CardIcon>
-              <CardTitle>Mission Overview</CardTitle>
-              <CardContent>
-                <p>
-                  Serving as Electrical Lead for NASA's RockSat-X 2025 mission, building upon
-                  the 2024 flight with enhanced payload capabilities, improved
-                  electrical systems. This mission features advanced sensing capabilities and
-                  more sophisticated data acquisition systems.
-                </p>
-                <p>
-                  As Electrical Lead, I'm responsible for all electrical subsystems, power
-                  distribution, signal conditioning, and ensuring electromagnetic compatibility
-                  for the harsh space environment.
-                </p>
-              </CardContent>
-            </ContentCard>
+                    <ContentGrid>
+                        <ContentCard variants={itemVariants}>
+                            <CardIcon>
+                                <FiZap />
+                            </CardIcon>
+                            <CardTitle>Mission Overview</CardTitle>
+                            <CardContent>
+                                <p>
+                                    Serving as Electrical Lead for NASA's RockSat-X 2025 mission, building upon
+                                    the 2024 flight with enhanced payload capabilities, improved
+                                    electrical systems. This mission features advanced sensing capabilities and
+                                    more sophisticated data acquisition systems.
+                                </p>
+                                <p>
+                                    As Electrical Lead, I'm responsible for all electrical subsystems, power
+                                    distribution, signal conditioning, embedded programming, and ensuring electromagnetic compatibility
+                                    for the harsh space environment.
+                                </p>
+                                <p>
+                                    Lead development of the A.T.L.A.S - Advanced Three-Dimensional LiDAR Apparatus for Space.
+                                    The ATLAS is a topographic 3D scanning system developed to identify and model
+                                    the outer shell of space vehicles, used for identifying structural anomolies and damage during space flight.
+                                    Utilizes an infrared time-of-flight sensor, MEMS mirror, and rotating mirror assembly which extends outwards
+                                    at apogee.
+                                </p>
+                            </CardContent>
+                        </ContentCard>
 
-            <ContentCard variants={itemVariants}>
-              <CardIcon>
-                <FiUsers />
-              </CardIcon>
-              <CardTitle>Leadership & Team</CardTitle>
-              <CardContent>
-                <p>
-                  <strong>Electrical Team Lead</strong> - Leading a multidisciplinary team of
-                  electrical engineers, managing PCB design, system integration, and testing
-                  protocols for space-qualified hardware.
-                </p>
-                <AchievementsList>
-                  <li>Coordinating electrical design with mechanical and software teams</li>
-                  <li>Implementing rigorous testing and qualification procedures</li>
-                  <li>Managing component selection for space environment reliability</li>
-                  <li>Establishing design standards and review processes</li>
-                </AchievementsList>
-              </CardContent>
-            </ContentCard>
+                        <ContentCard variants={itemVariants}>
+                            <CardIcon>
+                                <FiUsers />
+                            </CardIcon>
+                            <CardTitle>Leadership & Team</CardTitle>
+                            <CardContent>
+                                <p>
+                                    <strong>Electrical Team Lead</strong> - Leading development of all electrical systems, managing PCB design, system integration, and testing
+                                    protocols for space-qualified hardware.
+                                </p>
+                                <AchievementsList>
+                                    <li>Coordinating electrical design with mechanical and software teams</li>
+                                    <li>Implementing rigorous testing and qualification procedures</li>
+                                    <li>Writing code for all embedded microcontroller systems</li>
+                                    <li>Managing component selection for space environment reliability</li>
+                                    <li>Establishing design standards and review processes</li>
+                                </AchievementsList>
+                            </CardContent>
+                        </ContentCard>
 
-            <ContentCard variants={itemVariants}>
-              <CardIcon>
-                <FiCpu />
-              </CardIcon>
-              <CardTitle>Technical Systems</CardTitle>
-              <CardContent>
-                <p>
-                  Designing and implementing next-generation electrical systems for enhanced
-                  scientific capabilities, including:
-                </p>
-                <AchievementsList>
-                  <li>Multi-layer PCB design for high-speed digital systems</li>
-                  <li>Low-noise analog front-end for sensitive measurements</li>
-                  <li>Redundant power distribution and protection systems</li>
-                  <li>High-reliability connectors and cable assemblies</li>
-                  <li>EMI shielding and grounding for space environment</li>
-                </AchievementsList>
-                <TechStack>
-                  {techStack.map((tech, index) => (
-                    <TechTag key={index}>{tech}</TechTag>
-                  ))}
-                </TechStack>
-              </CardContent>
-            </ContentCard>
+                        <ContentCard variants={itemVariants}>
+                            <CardIcon>
+                                <FiCpu />
+                            </CardIcon>
+                            <CardTitle>Technical Systems</CardTitle>
+                            <CardContent>
+                                <p>
+                                    Designing and implementing next-generation electrical systems for enhanced
+                                    scientific capabilities, including:
+                                </p>
+                                <AchievementsList>
+                                    <li>Multi-layer PCB design for high-speed digital systems</li>
+                                    <li>Low-noise analog front-end for sensitive measurements</li>
+                                    <li>Redundant power distribution and protection systems</li>
+                                    <li>High-reliability connectors and cable assemblies</li>
+                                    <li>EMI shielding and grounding for space environment</li>
+                                </AchievementsList>
+                                <TechStack>
+                                    {techStack.map((tech, index) => (
+                                        <TechTag key={index}>{tech}</TechTag>
+                                    ))}
+                                </TechStack>
+                            </CardContent>
+                        </ContentCard>
 
-            <ContentCard variants={itemVariants}>
-              <CardIcon>
-                <FiSettings />
-              </CardIcon>
-              <CardTitle>Innovation & Improvements</CardTitle>
-              <CardContent>
-                <p>
-                  Building on lessons learned from 2024, implementing significant improvements
-                  and new technologies for enhanced mission capabilities:
-                </p>
-                <AchievementsList>
-                  <li>Advanced power management with smart switching systems</li>
-                  <li>Improved signal conditioning for higher accuracy measurements</li>
-                  <li>Enhanced fault detection and autonomous recovery systems</li>
-                  <li>Modular design for rapid integration and testing</li>
-                  <li>Next-generation data acquisition with higher sampling rates</li>
-                </AchievementsList>
-              </CardContent>
-            </ContentCard>
-          </ContentGrid>
+                        <ContentCard variants={itemVariants}>
+                            <CardIcon>
+                                <FiSettings />
+                            </CardIcon>
+                            <CardTitle>Innovation & Improvements</CardTitle>
+                            <CardContent>
+                                <p>
+                                    Building on lessons learned from 2024, implementing significant improvements
+                                    and new technologies for enhanced mission capabilities:
+                                </p>
+                                <AchievementsList>
+                                    <li>Advanced power management with smart switching systems</li>
+                                    <li>Improved signal conditioning for higher accuracy measurements</li>
+                                    <li>Enhanced fault detection and autonomous recovery systems</li>
+                                    <li>Modular design for rapid integration and testing</li>
+                                    <li>Next-generation data acquisition with higher sampling rates</li>
+                                </AchievementsList>
+                            </CardContent>
+                        </ContentCard>
+                    </ContentGrid>
 
-          <LinksSection variants={itemVariants}>
-            <h3 style={{ marginBottom: '1.5rem', color: '#ffffff' }}>
-              Project Resources & Documentation
-            </h3>
-            <div>
-              <LinkButton
-                href="https://github.com/nasa-rocksat-2025"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FiGithub />
-                View Schematics & Design
-              </LinkButton>
-              <LinkButton
-                href="https://nasa.gov/rocksat-x"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FiExternalLink />
-                NASA Mission Page
-              </LinkButton>
-            </div>
-          </LinksSection>
-        </motion.div>
-      </Container>
-    </ProjectContainer>
-  );
+                    <LinksSection variants={itemVariants}>
+                        <h3 style={{ marginBottom: '1.5rem', color: '#ffffff' }}>
+                            Project Resources & Documentation
+                        </h3>
+                        <div>
+                            <LinkButton
+                                href="https://github.com/aram-ap/MiniChrisBoxPowerAnalyzer"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <FiGithub />
+                                View Mini Chris Box (Side Project)
+                            </LinkButton>
+                            <LinkButton
+                                href="https://github.com/aram-ap/NASA-RockSatX-2025"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <FiGithub />
+                                View Schematics & Design
+                            </LinkButton>
+                            <LinkButton
+                                href="https://nasa.gov/rocksat-x"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <FiExternalLink />
+                                NASA Mission Page
+                            </LinkButton>
+                        </div>
+                    </LinksSection>
+                </motion.div>
+            </Container>
+        </ProjectContainer>
+    );
 };
 
 export default NASARockSat2025;

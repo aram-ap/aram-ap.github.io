@@ -230,13 +230,19 @@ const ErrorMessage = styled(motion.div)`
   font-weight: ${(props) => props.theme.typography.fontWeights.medium};
 `;
 
+/**
+ * Contact page component with form handling and EmailJS integration
+ * Features: form validation, success/error states, social media links
+ */
 const Contact = () => {
+  // Form state management
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: ""
   });
+  // UI state management
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
