@@ -361,7 +361,7 @@ const NASARockSat2025 = () => {
                                 View Schematics & Design
                             </LinkButton>
                             <LinkButton
-                                href="https://nasa.gov/rocksat-x"
+                                href="https://www.nasa.gov/wallops/stem/rocksatx/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 whileHover={{ scale: 1.05 }}
