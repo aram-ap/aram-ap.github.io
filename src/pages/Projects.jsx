@@ -21,7 +21,7 @@ const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 ${(props) => props.theme.spacing.lg};
-  
+
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     padding: 0 20px;
   }
@@ -313,8 +313,8 @@ const EmptyState = styled(motion.div)`
 
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState("All");
-  const [activeSort, setActiveSort] = useState("name");
-  const [sortDirection, setSortDirection] = useState("asc");
+  const [activeSort, setActiveSort] = useState("date");
+  const [sortDirection, setSortDirection] = useState("desc");
 
   const categories = getCategories();
   const progressOptions = ["All", "completed", "in-progress", "planned"];
@@ -328,7 +328,7 @@ const Projects = () => {
   // Sort projects
   const sortedProjects = [...filteredProjects].sort((a, b) => {
     let comparison = 0;
-    
+
     switch (activeSort) {
       case "name":
         comparison = a.title.localeCompare(b.title);
@@ -345,7 +345,7 @@ const Projects = () => {
       default:
         comparison = 0;
     }
-    
+
     return sortDirection === "asc" ? comparison : -comparison;
   });
 
@@ -360,10 +360,10 @@ const Projects = () => {
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
     });
   };
 
@@ -522,21 +522,21 @@ const Projects = () => {
                         More
                       </ProjectTypeIndicator>
                     )}
-                    
+
                     <ProgressTag $progress={project.progress}>
                       {getProgressIcon(project.progress)}
                       {getProgressText(project.progress)}
                     </ProgressTag>
-                    
+
                     <ProjectImage $gradient={project.gradientId ? getGradientById(project.gradientId).value : undefined}>
                       {project.featuredImage && project.featuredImage.trim() !== "" && (
-                        <img 
-                          src={project.featuredImage} 
+                        <img
+                          src={project.featuredImage}
                           alt={project.title}
                           onError={(e) => {
                             e.target.style.display = 'none';
-                            const gradient = project.gradientId 
-                              ? getGradientById(project.gradientId).value 
+                            const gradient = project.gradientId
+                              ? getGradientById(project.gradientId).value
                               : `linear-gradient(135deg, #6c5ce7, #00b894)`;
                             e.target.parentElement.style.background = gradient;
                           }}
@@ -547,7 +547,7 @@ const Projects = () => {
                       <ProjectTitle>{project.title}</ProjectTitle>
                       <ProjectSubtitle>{project.subtitle}</ProjectSubtitle>
                       <ProjectDescription>
-                        {project.excerpt || (project.type === 'detailed' 
+                        {project.excerpt || (project.type === 'detailed'
                           ? 'Click to view detailed project information and documentation.'
                           : 'Click to view the project on GitHub.'
                         )}

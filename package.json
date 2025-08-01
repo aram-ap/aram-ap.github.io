@@ -11,7 +11,10 @@
     "add-post": "node scripts/add-blog-post.js",
     "build-blog": "node scripts/build-blog.js",
     "build-projects": "node scripts/build-projects.js",
-    "create-post": "node scripts/create-blog-post.js"
+    "create-post": "node scripts/create-blog-post.js",
+    "watch-content": "node scripts/watch-content.js",
+    "dev-with-watch": "node scripts/dev-with-watch.js",
+    "test-watcher": "node scripts/test-watcher.js"
   },
   "repository": {
     "type": "git",

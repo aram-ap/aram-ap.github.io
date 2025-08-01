@@ -3,6 +3,24 @@
 
 export const blogPosts = [
   {
+    "id": 1754007961412,
+    "slug": "pyg-engine-python-game-engine",
+    "title": "PyG-Engine | Python Game Engine",
+    "excerpt": "PyG Engine is a Python game engine that brings Unity-like simplicity to Python game development. Born from the frustration of repeatedly rewriting the same boilerplate code, it provides a component-based architecture that feels natural to Python developers.",
+    "featuredImage": "/images/pyg-engine-logo.png",
+    "gradientId": "forest",
+    "content": "\n# Building [PyG Engine:](https://www.github.com/aram-ap/pyg-engine) Why I'm Creating a Python Game Engine\n\n## Introduction\n\nPygame is a powerful tool for python 2D game development, but it doesn't have the same refinement as major game engines like Unity\nor Godot. PyG-Engine buids upon PyGame providing a component-based architecture, built-in physics system, game object management, and more.\n\n####  In this post, I'll go over:\n> - The problems of python game development\n> - My vision for PyG-Engine\n> - What makes this different\n> - The current state of development\n> - Future plans\n> - Why this matters\n\n## The Problem\n- What's missing in the Python game development ecosystem\n- Why existing solutions don't quite fit\n- The gap between Pygame tutorials and production games\n\nPopular python game devlopment tools like pygame, Arcade,\n\n## The Vision\n- What PyG Engine aims to be\n- The target audience (students, indie devs, Python enthusiasts)\n- The philosophy behind the design decisions\n\n## What Makes PyG Engine Different\n- Component-based architecture\n- Built-in physics system\n- Event-driven communication\n- Familiar Python patterns\n- Comprehensive input system\n\n## Current State\n- What's working now\n- Key features that are implemented\n- Example of what you can build with it\n\n## Future Plans\n- What's coming next\n- Roadmap for development\n- Long-term vision\n\n## Why This Matters\n- Impact on Python game development ecosystem\n- Benefits for different user groups\n- Educational value\n\n## Conclusion\n- Call to action\n- How to get involved\n- Final thoughts on the project's potential\n\n",
+    "date": "2025-08-01T00:00:00.000Z",
+    "readTime": "10 min read",
+    "tags": [
+      "Game Engines",
+      "Development",
+      "Project",
+      "Python"
+    ],
+    "category": "Game Development"
+  },
+  {
     "id": 1753681241787,
     "slug": "building-a-modern-portfolio-with-react",
     "title": "Building a Modern Portfolio with React",
