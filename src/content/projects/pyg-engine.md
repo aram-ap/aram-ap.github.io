@@ -9,7 +9,7 @@ github: https://github.com/aram-ap/pyg-engine
 tech: ["Python", "PyGame", "Game Engine"]
 category: "Backend"
 gradientId: forest
-featuredImage: images/pyg-engine-logo.png
+featuredImage: /images/pyg-engine-logo.png
 excerpt: "PyG Engine is a Python game engine that brings Unity-like simplicity to Python game development. Born from the frustration of repeatedly rewriting the same boilerplate code, it provides a component-based architecture that feels natural to Python developers."
 progress: in-progress
 dateStarted: "2025-07-29"

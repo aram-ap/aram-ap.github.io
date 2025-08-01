@@ -10,7 +10,7 @@ external: https://www.nasa.gov/wallops/stem/rocksatx/
 tech: ["PCB Design", "KiCad", "Analog Circuits", "Digital Signal Processing", "Power Systems", "EMI/EMC", "Microcontrollers", "Sensor Interfaces", "Flight Avionics", "Testing & Validation"]
 category: "Space & Aerospace"
 gradientId: tech
-featuredImage: src/assets/space-exploration.jpg
+featuredImage: /images/projects/rsx25/ATLAS_LOGO.png
 excerpt: "Serving as Electrical Lead for NASA's RockSat-X 2025 mission, developing advanced electrical systems and leading the ATLAS 3D scanning payload for space vehicle structural analysis."
 progress: in-progress
 dateStarted: "2024-09-01"
