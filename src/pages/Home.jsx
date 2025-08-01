@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FiGithub, FiLinkedin, FiMail, FiDownload, FiSend, FiZap } from "react-icons/fi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import profileImage from "../assets/me.jpg";
+// Using public path instead of import to avoid build issues
+const profileImage = "/images/me.jpg";
 import CircuitReveal from "../components/CircuitReveal";
 
 const HomeContainer = styled.main`
