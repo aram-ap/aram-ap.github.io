@@ -2,7 +2,7 @@
 id: 3
 slug: pyg-engine
 title: PyG-Engine
-subtitle: A simple utility library
+subtitle: A complete python-based game engine
 year: 2025
 type: github-only
 github: https://github.com/aram-ap/pyg-engine
