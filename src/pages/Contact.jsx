@@ -314,11 +314,6 @@ const Contact = () => {
       text: "aram@apra.dev"
     },
     {
-      icon: FiPhone,
-      title: "Phone",
-      text: "+1 (661) 877-3347"
-    },
-    {
       icon: FiMapPin,
       title: "Location",
       text: "Santa Cruz, CA"
